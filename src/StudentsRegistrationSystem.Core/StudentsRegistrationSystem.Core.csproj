@@ -6,13 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Alunos\Domains\DTOs\" />
-    <Folder Include="Alunos\Domains\Mappings\" />
-    <Folder Include="Cursos\Domains\DTOs\" />
-    <Folder Include="Cursos\Domains\Mappings\" />
-    <Folder Include="Matriculas\Domains\DTOs\" />
-    <Folder Include="Matriculas\Domains\Mappings\" />
-  </ItemGroup>
-
 </Project>

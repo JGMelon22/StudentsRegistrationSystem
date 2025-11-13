@@ -8,6 +8,15 @@
     <ProjectReference Include="..\StudentsRegistrationSystem.Core\StudentsRegistrationSystem.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Alunos\Commands\Handlers\" />
+    <Folder Include="Alunos\Queries\Handlers\" />
+    <Folder Include="Cursos\Commands\Handlers\" />
+    <Folder Include="Cursos\Queries\Handlers\" />
+    <Folder Include="Matriculas\Commands\Handlers\" />
+    <Folder Include="Matriculas\Queries\Handlers\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

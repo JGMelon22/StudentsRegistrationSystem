@@ -1,11 +1,12 @@
-﻿using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Responses;
+﻿using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Requests;
+using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Cursos.Domains.Entities;
 
 namespace StudentsRegistrationSystem.Core.Cursos.Domains.Mappings;
 
 public static class MappingExtensions
 {
-    public static Curso ToDomain(this CreateCursoRequest request)
+    public static Curso ToDomain(this CursoRequest request)
         => new(request.Nome, request.Descricao);
 
     public static CursoResponse ToResponse(this Curso curso)

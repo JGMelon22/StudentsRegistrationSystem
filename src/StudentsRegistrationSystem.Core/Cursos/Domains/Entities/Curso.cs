@@ -1,4 +1,5 @@
 ﻿using StudentsRegistrationSystem.Core.BaseEntity;
+using StudentsRegistrationSystem.Core.Matriculas.Domains.Entities;
 
 namespace StudentsRegistrationSystem.Core.Cursos.Domains.Entities;
 
@@ -10,7 +11,7 @@ public class Curso : Entity
     private readonly List<Matricula> _matriculas = new();
     public IReadOnlyCollection<Matricula> Matriculas => _matriculas.AsReadOnly();
 
-    protected Curso() { } 
+    protected Curso() { }
 
     public Curso(string nome, string descricao)
     {

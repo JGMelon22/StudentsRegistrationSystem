@@ -1,11 +1,12 @@
-﻿using StudentsRegistrationSystem.Core.Matriculas.Domains.DTOs.Responses;
+﻿using StudentsRegistrationSystem.Core.Matriculas.Domains.DTOs.Requests;
+using StudentsRegistrationSystem.Core.Matriculas.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Matriculas.Domains.Entities;
 
 namespace StudentsRegistrationSystem.Core.Matriculas.Domains.Mappings;
 
 public static class MappingExtensions
 {
-    public static Matricula ToDomain(this CreateMatriculaRequest request)
+    public static Matricula ToDomain(this MatriculaRequest request)
         => new(request.AlunoId, request.CursoId);
 
     public static MatriculaResponse ToResponse(this Matricula matricula)

@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="NetDevPack.SimpleMediator" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StudentsRegistrationSystem.Core\StudentsRegistrationSystem.Core.csproj" />
   </ItemGroup>
 

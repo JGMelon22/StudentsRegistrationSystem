@@ -15,6 +15,8 @@ using StudentsRegistrationSystem.Core.Alunos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Matriculas.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Shared;
+using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
+using StudentsRegistrationSystem.Infrastructure.Repositories;
 
 namespace StudentsRegistrationSystem.API.Extensions;
 
@@ -49,6 +51,15 @@ public static class IocExtensions
 
         // Matriculas - Queries
         services.AddScoped<IRequestHandler<GetAlunosByCursoQuery, Result<IEnumerable<AlunoResponse>>>, GetAlunosByCursoHandler>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IAlunoRepository, AlunoRepository>();
+        services.AddScoped<ICursoRepository, CursoRepository>();
+        services.AddScoped<IMatriculaRepository, MatriculaRepository>();
 
         return services;
     }

@@ -31,8 +31,8 @@ public static class IocExtensions
 
         // Alunos - Queries
         services.AddScoped<IRequestHandler<GetAlunoByIdQuery, Result<AlunoResponse>>, GetAlunoByIdHandler>();
-        services.AddScoped<IRequestHandler<GetAllAlunosQuery, IEnumerable<AlunoResponse>>, GetAllAlunosHandler>();
-        services.AddScoped<IRequestHandler<GetAlunosMatriculadosQuery, IEnumerable<AlunoResponse>>, GetAlunosMatriculadosHandler>();
+        services.AddScoped<IRequestHandler<GetAllAlunosQuery, Result<IEnumerable<AlunoResponse>>>, GetAllAlunosHandler>();
+        services.AddScoped<IRequestHandler<GetAlunosMatriculadosQuery, Result<IEnumerable<AlunoResponse>>>, GetAlunosMatriculadosHandler>();
 
         // Cursos - Commands
         services.AddScoped<IRequestHandler<CreateCursoCommand, Result<CursoResponse>>, CreateCursoHandler>();
@@ -48,7 +48,7 @@ public static class IocExtensions
         services.AddScoped<IRequestHandler<RemoveMatriculaCommand, Result<bool>>, RemoveMatriculaHandler>();
 
         // Matriculas - Queries
-        services.AddScoped<IRequestHandler<GetAlunosByCursoQuery, IEnumerable<AlunoResponse>>, GetAlunosByCursoHandler>();
+        services.AddScoped<IRequestHandler<GetAlunosByCursoQuery, Result<IEnumerable<AlunoResponse>>>, GetAlunosByCursoHandler>();
 
         return services;
     }

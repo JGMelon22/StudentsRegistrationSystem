@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Alunos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Alunos.Domains.Mappings;
-using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 

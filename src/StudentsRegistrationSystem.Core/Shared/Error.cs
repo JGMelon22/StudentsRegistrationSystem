@@ -21,4 +21,8 @@ public sealed record Error(int Code, string Description)
     public static readonly Error EnrollmentCourseNotFound = new(302, "Course not found for enrollment");
     public static readonly Error EnrollmentAlreadyEnrolled = new(303, "Student is already enrolled in this course");
     public static readonly Error EnrollmentNotEnrolled = new(304, "Student is not enrolled in this course");
+
+    // Technical/Infrastructure Errors
+    public static readonly Error DatabaseError = new(900, "A database error occurred");
+    public static readonly Error ServerError = new(999, "An unexpected server error occurred");
 }

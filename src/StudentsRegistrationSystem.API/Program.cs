@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(
 );
 
 builder.Services.AddHandlers();
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 

@@ -28,8 +28,13 @@ public class MatriculasController : ControllerBase
     /// Obtém todos os alunos matriculados em um curso específico.
     /// </summary>
     /// <param name="cursoId">Identificador único do curso.</param>
+    /// <param name="query">
+    /// Parâmetros adicionais de consulta, incluindo paginação:
+    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
-    /// <returns>Lista de alunos matriculados no curso.</returns>
+    /// <returns>Lista paginada de alunos matriculados no curso.</returns>
     /// <response code="200">Retorna a lista de alunos matriculados no curso.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("curso/{cursoId:guid}/alunos")]
@@ -58,7 +63,7 @@ public class MatriculasController : ControllerBase
         var result = await _mediator.Send(new CreateMatriculaCommand(request));
 
         return result.Match<IActionResult>(
-            matricula => Created($"/api/matriculas/{matricula.Id}", matricula),
+            matricula => Created($"{matricula.Id}", matricula),
             BadRequest
         );
     }

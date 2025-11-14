@@ -27,8 +27,13 @@ public class AlunosController : ControllerBase
     /// <summary>
     /// Obtém todos os alunos cadastrados.
     /// </summary>
+    /// <param name="query">
+    /// Parâmetros adicionais de consulta, incluindo paginação:
+    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
-    /// <returns>Lista de todos os alunos.</returns>
+    /// <returns>Lista paginada de alunos.</returns>
     /// <response code="200">Retorna a lista de alunos.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet]
@@ -45,8 +50,13 @@ public class AlunosController : ControllerBase
     /// <summary>
     /// Obtém todos os alunos que possuem ao menos uma matrícula ativa.
     /// </summary>
+    /// <param name="query">
+    /// Parâmetros adicionais de consulta, incluindo paginação:
+    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
-    /// <returns>Lista de alunos matriculados.</returns>
+    /// <returns>Lista paginada de alunos matriculados.</returns>
     /// <response code="200">Retorna a lista de alunos matriculados.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("matriculados")]

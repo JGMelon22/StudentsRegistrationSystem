@@ -27,8 +27,13 @@ public class CursosController : ControllerBase
     /// <summary>
     /// Obtém todos os cursos cadastrados.
     /// </summary>
+    /// <param name="query">
+    /// Parâmetros adicionais de consulta, incluindo paginação:
+    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
-    /// <returns>Lista de todos os cursos.</returns>
+    /// <returns>Lista paginada de cursos.</returns>
     /// <response code="200">Retorna a lista de cursos.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os cursos.</response>
     [HttpGet]

@@ -33,9 +33,10 @@ public class MatriculasController : ControllerBase
     /// <response code="200">Retorna a lista de alunos matriculados no curso.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("curso/{cursoId:guid}/alunos")]
-    public async Task<IActionResult> GetAlunosByCurso(Guid cursoId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAlunosByCurso(Guid cursoId, [FromQuery] GetAlunosByCursoQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetAlunosByCursoQuery(cursoId));
+        var queryWithCursoId = query with { CursoId = cursoId };
+        var result = await _mediator.Send(queryWithCursoId);
 
         return result.Match<IActionResult>(
             Ok,

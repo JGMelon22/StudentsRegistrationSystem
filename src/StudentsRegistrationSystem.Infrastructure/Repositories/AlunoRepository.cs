@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsRegistrationSystem.Core.Alunos.Domains.Entities;
+using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
@@ -26,14 +27,24 @@ public class AlunoRepository : Repository<Aluno>, IAlunoRepository
         return await query.AnyAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Aluno>> GetAlunosMatriculadosAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResponseOffset<Aluno>> GetAlunosMatriculadosAsync(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        return await _context.Matriculas
+        int skip = (pageNumber - 1) * pageSize;
+
+        var query = _context.Matriculas
             .Where(m => m.Ativa)
             .Select(m => m.Aluno)
             .Distinct()
-            .AsNoTracking()
+            .AsNoTracking();
+
+        int totalRecords = await query.CountAsync(cancellationToken);
+
+        List<Aluno> data = await query
+            .OrderBy(a => a.Nome)
+            .Skip(skip)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
+
+        return new PagedResponseOffset<Aluno>(data, pageNumber, pageSize, totalRecords);
     }
 }
-

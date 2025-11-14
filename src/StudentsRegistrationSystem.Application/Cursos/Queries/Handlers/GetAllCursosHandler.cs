@@ -8,7 +8,7 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Queries.Handlers;
 
-public class GetAllCursosHandler : IRequestHandler<GetAllCursosQuery, Result<IEnumerable<CursoResponse>>>
+public class GetAllCursosHandler : IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>
 {
     private readonly ICursoRepository _cursoRepository;
     private readonly ILogger<GetAllCursosHandler> _logger;
@@ -19,22 +19,32 @@ public class GetAllCursosHandler : IRequestHandler<GetAllCursosQuery, Result<IEn
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<CursoResponse>>> Handle(GetAllCursosQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedResponseOffset<CursoResponse>>> Handle(GetAllCursosQuery query, CancellationToken cancellationToken)
     {
         try
         {
-            var cursos = await _cursoRepository.GetAllAsync(cancellationToken);
-            return Result<IEnumerable<CursoResponse>>.Success(cursos.ToResponse());
+            var pagedCursos = await _cursoRepository.GetAllAsync(query.PageNumber, query.PageSize, cancellationToken);
+
+            var cursosResponse = pagedCursos.Data.Select(c => c.ToResponse()).ToList();
+
+            var pagedResponse = new PagedResponseOffset<CursoResponse>(
+                cursosResponse,
+                pagedCursos.PageNumber,
+                pagedCursos.PageSize,
+                pagedCursos.TotalRecords
+            );
+
+            return Result<PagedResponseOffset<CursoResponse>>.Success(pagedResponse);
         }
         catch (DbUpdateException ex)
         {
             _logger.LogError(ex, "Database error ao buscar todos os cursos.");
-            return Result<IEnumerable<CursoResponse>>.Failure(Error.DatabaseError);
+            return Result<PagedResponseOffset<CursoResponse>>.Failure(Error.DatabaseError);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro inesperado ao buscar todos os cursos.");
-            return Result<IEnumerable<CursoResponse>>.Failure(Error.ServerError);
+            return Result<PagedResponseOffset<CursoResponse>>.Failure(Error.ServerError);
         }
     }
 }

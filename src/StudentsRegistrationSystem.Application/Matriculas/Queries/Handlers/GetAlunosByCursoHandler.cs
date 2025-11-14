@@ -3,13 +3,12 @@ using Microsoft.Extensions.Logging;
 using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Alunos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Alunos.Domains.Mappings;
-using StudentsRegistrationSystem.Core.Matriculas.Domains.Mappings;
 using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Matriculas.Queries.Handlers;
 
-public class GetAlunosByCursoHandler : IRequestHandler<GetAlunosByCursoQuery, Result<IEnumerable<AlunoResponse>>>
+public class GetAlunosByCursoHandler : IRequestHandler<GetAlunosByCursoQuery, Result<PagedResponseOffset<AlunoResponse>>>
 {
     private readonly ICursoRepository _cursoRepository;
     private readonly ILogger<GetAlunosByCursoHandler> _logger;
@@ -20,7 +19,7 @@ public class GetAlunosByCursoHandler : IRequestHandler<GetAlunosByCursoQuery, Re
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<AlunoResponse>>> Handle(GetAlunosByCursoQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedResponseOffset<AlunoResponse>>> Handle(GetAlunosByCursoQuery query, CancellationToken cancellationToken)
     {
         try
         {
@@ -29,21 +28,38 @@ public class GetAlunosByCursoHandler : IRequestHandler<GetAlunosByCursoQuery, Re
             if (!cursoExists)
             {
                 _logger.LogWarning("Curso não encontrado ao buscar alunos. CursoId: {CursoId}", query.CursoId);
-                return Result<IEnumerable<AlunoResponse>>.Failure(Error.CourseNotFound);
+                return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.CourseNotFound);
             }
 
-            var alunos = await _cursoRepository.GetAlunosByCursoIdAsync(query.CursoId, cancellationToken);
-            return Result<IEnumerable<AlunoResponse>>.Success(alunos.ToResponse());
+            var pagedAlunos = await _cursoRepository.GetAlunosByCursoIdAsync(
+                query.CursoId,
+                query.PageNumber,
+                query.PageSize,
+                cancellationToken);
+
+            var alunosResponse = pagedAlunos.Data.Select(a => a.ToResponse()).ToList();
+
+            var pagedResponse = new PagedResponseOffset<AlunoResponse>(
+                alunosResponse,
+                pagedAlunos.PageNumber,
+                pagedAlunos.PageSize,
+                pagedAlunos.TotalRecords
+            );
+
+            _logger.LogInformation("Consulta paginada de alunos por curso realizada com sucesso. CursoId: {CursoId}, Página: {PageNumber}, Tamanho: {PageSize}, Total: {Total}",
+                query.CursoId, pagedAlunos.PageNumber, pagedAlunos.PageSize, pagedAlunos.TotalRecords);
+
+            return Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
         }
         catch (DbUpdateException ex)
         {
             _logger.LogError(ex, "Database error ao buscar alunos do curso. CursoId: {CursoId}", query.CursoId);
-            return Result<IEnumerable<AlunoResponse>>.Failure(Error.DatabaseError);
+            return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro inesperado ao buscar alunos do curso. CursoId: {CursoId}", query.CursoId);
-            return Result<IEnumerable<AlunoResponse>>.Failure(Error.ServerError);
+            return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.ServerError);
         }
     }
 }

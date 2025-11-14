@@ -32,9 +32,9 @@ public class AlunosController : ControllerBase
     /// <response code="200">Retorna a lista de alunos.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllAlunosQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetAllAlunosQuery());
+        var result = await _mediator.Send(query);
 
         return result.Match<IActionResult>(
             Ok,
@@ -50,9 +50,9 @@ public class AlunosController : ControllerBase
     /// <response code="200">Retorna a lista de alunos matriculados.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("matriculados")]
-    public async Task<IActionResult> GetMatriculados(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMatriculados([FromQuery] GetAlunosMatriculadosQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetAlunosMatriculadosQuery());
+        var result = await _mediator.Send(query);
 
         return result.Match<IActionResult>(
             Ok,

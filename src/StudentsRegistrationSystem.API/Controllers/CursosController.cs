@@ -32,9 +32,9 @@ public class CursosController : ControllerBase
     /// <response code="200">Retorna a lista de cursos.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os cursos.</response>
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllCursosQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetAllCursosQuery());
+        var result = await _mediator.Send(query);
 
         return result.Match<IActionResult>(
             Ok,

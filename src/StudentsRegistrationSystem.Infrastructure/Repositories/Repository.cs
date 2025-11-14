@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsRegistrationSystem.Core.BaseEntity;
+using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
@@ -21,9 +22,20 @@ public class Repository<T> : IRepository<T> where T : Entity
         return await _dbSet.FindAsync(id, cancellationToken);
     }
 
-    public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<PagedResponseOffset<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+        int skip = (pageNumber - 1) * pageSize;
+
+        int totalRecords = await _dbSet.AsNoTracking().CountAsync(cancellationToken);
+
+        List<T> data = await _dbSet
+            .AsNoTracking()
+            .OrderBy(e => e.Id) // IRL seria melhor usar pela data de criação, e mais ainda usar KeySet ao em vez de OffSet...
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResponseOffset<T>(data, pageNumber, pageSize, totalRecords);
     }
 
     public virtual async Task AddAsync(T entity, CancellationToken cancellationToken = default)

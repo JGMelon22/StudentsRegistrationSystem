@@ -4,4 +4,4 @@ using StudentsRegistrationSystem.Core.Shared;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Queries;
 
-public record GetAlunosMatriculadosQuery : IRequest<Result<IEnumerable<AlunoResponse>>>;
+public record GetAlunosMatriculadosQuery(int PageNumber = 1, int PageSize = 10) : IRequest<Result<PagedResponseOffset<AlunoResponse>>>;

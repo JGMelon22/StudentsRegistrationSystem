@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsRegistrationSystem.Core.Alunos.Domains.Entities;
 using StudentsRegistrationSystem.Core.Cursos.Domains.Entities;
+using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
@@ -17,13 +18,21 @@ public class CursoRepository : Repository<Curso>, ICursoRepository
         return await _dbSet.AnyAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Aluno>> GetAlunosByCursoIdAsync(Guid cursoId, CancellationToken cancellationToken = default)
+    public async Task<PagedResponseOffset<Aluno>> GetAlunosByCursoIdAsync(Guid cursoId, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        return await _context.Matriculas
+        var query = _context.Matriculas
             .Where(m => m.CursoId == cursoId && m.Ativa)
             .Include(m => m.Aluno)
             .Select(m => m.Aluno)
-            .AsNoTracking()
+            .AsNoTracking();
+
+        var totalRecords = await query.CountAsync(cancellationToken);
+
+        var data = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
+
+        return new PagedResponseOffset<Aluno>(data, pageNumber, pageSize, totalRecords);
     }
 }

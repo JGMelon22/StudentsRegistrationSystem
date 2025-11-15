@@ -7,16 +7,16 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Commands.Handlers;
 
-public class DeleteAlunoHandler : IRequestHandler<DeleteAlunoCommand, Result<bool>>
+public class DeleteAlunoCommandHandler : IRequestHandler<DeleteAlunoCommand, Result<bool>>
 {
     private readonly IAlunoRepository _alunoRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<DeleteAlunoHandler> _logger;
+    private readonly ILogger<DeleteAlunoCommandHandler> _logger;
 
-    public DeleteAlunoHandler(
+    public DeleteAlunoCommandHandler(
         IAlunoRepository alunoRepository,
         AppDbContext context,
-        ILogger<DeleteAlunoHandler> logger)
+        ILogger<DeleteAlunoCommandHandler> logger)
     {
         _alunoRepository = alunoRepository;
         _context = context;

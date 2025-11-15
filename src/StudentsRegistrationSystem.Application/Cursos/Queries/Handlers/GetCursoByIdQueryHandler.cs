@@ -7,12 +7,12 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Queries.Handlers;
 
-public class GetCursoByIdHandler : IRequestHandler<GetCursoByIdQuery, Result<CursoResponse>>
+public class GetCursoByIdQueryHandler : IRequestHandler<GetCursoByIdQuery, Result<CursoResponse>>
 {
     private readonly ICursoRepository _cursoRepository;
-    private readonly ILogger<GetCursoByIdHandler> _logger;
+    private readonly ILogger<GetCursoByIdQueryHandler> _logger;
 
-    public GetCursoByIdHandler(ICursoRepository cursoRepository, ILogger<GetCursoByIdHandler> logger)
+    public GetCursoByIdQueryHandler(ICursoRepository cursoRepository, ILogger<GetCursoByIdQueryHandler> logger)
     {
         _cursoRepository = cursoRepository;
         _logger = logger;

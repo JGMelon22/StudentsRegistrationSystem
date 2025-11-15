@@ -8,22 +8,22 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Queries.Handlers;
 
-public class GetAllAlunosHandler : IRequestHandler<GetAllAlunosQuery, Result<PagedResponseOffset<AlunoResponse>>>
+public class GetAlunosMatriculadosQueryHandler : IRequestHandler<GetAlunosMatriculadosQuery, Result<PagedResponseOffset<AlunoResponse>>>
 {
     private readonly IAlunoRepository _alunoRepository;
-    private readonly ILogger<GetAllAlunosHandler> _logger;
+    private readonly ILogger<GetAlunosMatriculadosQueryHandler> _logger;
 
-    public GetAllAlunosHandler(IAlunoRepository alunoRepository, ILogger<GetAllAlunosHandler> logger)
+    public GetAlunosMatriculadosQueryHandler(IAlunoRepository alunoRepository, ILogger<GetAlunosMatriculadosQueryHandler> logger)
     {
         _alunoRepository = alunoRepository;
         _logger = logger;
     }
 
-    public async Task<Result<PagedResponseOffset<AlunoResponse>>> Handle(GetAllAlunosQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedResponseOffset<AlunoResponse>>> Handle(GetAlunosMatriculadosQuery query, CancellationToken cancellationToken)
     {
         try
         {
-            var pagedAlunos = await _alunoRepository.GetAllAsync(query.PageNumber, query.PageSize, cancellationToken);
+            var pagedAlunos = await _alunoRepository.GetAlunosMatriculadosAsync(query.PageNumber, query.PageSize, cancellationToken);
 
             var alunosResponse = pagedAlunos.Data.Select(a => a.ToResponse()).ToList();
 
@@ -34,19 +34,19 @@ public class GetAllAlunosHandler : IRequestHandler<GetAllAlunosQuery, Result<Pag
                 pagedAlunos.TotalRecords
             );
 
-            _logger.LogInformation("Consulta paginada de alunos realizada com sucesso. Página: {PageNumber}, Tamanho: {PageSize}, Total: {Total}",
+            _logger.LogInformation("Consulta paginada de alunos matriculados realizada com sucesso. Página: {PageNumber}, Tamanho: {PageSize}, Total: {Total}",
                 pagedAlunos.PageNumber, pagedAlunos.PageSize, pagedAlunos.TotalRecords);
 
             return Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, "Erro de banco de dados ao consultar alunos.");
+            _logger.LogError(ex, "Erro de banco de dados ao consultar alunos matriculados.");
             return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro inesperado ao consultar alunos.");
+            _logger.LogError(ex, "Erro inesperado ao consultar alunos matriculados.");
             return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.ServerError);
         }
     }

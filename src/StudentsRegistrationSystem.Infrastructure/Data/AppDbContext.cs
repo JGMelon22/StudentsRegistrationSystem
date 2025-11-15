@@ -24,4 +24,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CursoConfiguration());
         modelBuilder.ApplyConfiguration(new MatriculaConfiguration());
     }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
 }

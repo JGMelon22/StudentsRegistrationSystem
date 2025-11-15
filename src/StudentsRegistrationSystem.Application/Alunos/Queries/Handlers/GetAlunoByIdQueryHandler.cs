@@ -8,12 +8,12 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Queries.Handlers;
 
-public class GetAlunoByIdHandler : IRequestHandler<GetAlunoByIdQuery, Result<AlunoResponse>>
+public class GetAlunoByIdQueryHandler : IRequestHandler<GetAlunoByIdQuery, Result<AlunoResponse>>
 {
     private readonly IAlunoRepository _alunoRepository;
-    private readonly ILogger<GetAlunoByIdHandler> _logger;
+    private readonly ILogger<GetAlunoByIdQueryHandler> _logger;
 
-    public GetAlunoByIdHandler(IAlunoRepository alunoRepository, ILogger<GetAlunoByIdHandler> logger)
+    public GetAlunoByIdQueryHandler(IAlunoRepository alunoRepository, ILogger<GetAlunoByIdQueryHandler> logger)
     {
         _alunoRepository = alunoRepository;
         _logger = logger;

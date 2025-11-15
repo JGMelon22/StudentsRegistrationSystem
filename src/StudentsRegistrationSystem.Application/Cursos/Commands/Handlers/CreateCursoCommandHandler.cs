@@ -9,45 +9,38 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Commands.Handlers;
 
-public class UpdateCursoHandler : IRequestHandler<UpdateCursoCommand, Result<CursoResponse>>
+public class CreateCursoCommandHandler : IRequestHandler<CreateCursoCommand, Result<CursoResponse>>
 {
     private readonly ICursoRepository _cursoRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<UpdateCursoHandler> _logger;
+    private readonly ILogger<CreateCursoCommandHandler> _logger;
 
-    public UpdateCursoHandler(ICursoRepository cursoRepository, AppDbContext context, ILogger<UpdateCursoHandler> logger)
+    public CreateCursoCommandHandler(ICursoRepository cursoRepository, AppDbContext context, ILogger<CreateCursoCommandHandler> logger)
     {
         _cursoRepository = cursoRepository;
         _context = context;
         _logger = logger;
     }
 
-    public async Task<Result<CursoResponse>> Handle(UpdateCursoCommand command, CancellationToken cancellationToken)
+    public async Task<Result<CursoResponse>> Handle(CreateCursoCommand command, CancellationToken cancellationToken)
     {
         try
         {
-            var curso = await _cursoRepository.GetByIdAsync(command.Id, cancellationToken);
+            var curso = command.Request.ToDomain();
 
-            if (curso == null)
-            {
-                _logger.LogWarning("Curso não encontrado para atualização. CursoId: {CursoId}", command.Id);
-                return Result<CursoResponse>.Failure(Error.CourseNotFound);
-            }
-
-            curso.Atualizar(command.Request.Nome, command.Request.Descricao);
-            _cursoRepository.Update(curso);
+            await _cursoRepository.AddAsync(curso, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<CursoResponse>.Success(curso.ToResponse());
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, "Erro de banco de dados ao atualizar curso. CursoId: {CursoId}", command.Id);
+            _logger.LogError(ex, "Erro de banco de dados ao criar curso. Nome: {Nome}", command.Request.Nome);
             return Result<CursoResponse>.Failure(Error.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro inesperado ao atualizar curso. CursoId: {CursoId}", command.Id);
+            _logger.LogError(ex, "Erro inesperado ao criar curso. Nome: {Nome}", command.Request.Nome);
             return Result<CursoResponse>.Failure(Error.ServerError);
         }
     }

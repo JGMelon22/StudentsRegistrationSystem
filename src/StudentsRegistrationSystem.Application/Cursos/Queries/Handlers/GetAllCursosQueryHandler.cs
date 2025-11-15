@@ -8,12 +8,12 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Queries.Handlers;
 
-public class GetAllCursosHandler : IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>
+public class GetAllCursosQueryHandler : IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>
 {
     private readonly ICursoRepository _cursoRepository;
-    private readonly ILogger<GetAllCursosHandler> _logger;
+    private readonly ILogger<GetAllCursosQueryHandler> _logger;
 
-    public GetAllCursosHandler(ICursoRepository cursoRepository, ILogger<GetAllCursosHandler> logger)
+    public GetAllCursosQueryHandler(ICursoRepository cursoRepository, ILogger<GetAllCursosQueryHandler> logger)
     {
         _cursoRepository = cursoRepository;
         _logger = logger;

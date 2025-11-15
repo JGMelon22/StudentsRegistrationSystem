@@ -9,13 +9,13 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Commands.Handlers;
 
-public class CreateAlunoHandler : IRequestHandler<CreateAlunoCommand, Result<AlunoResponse>>
+public class CreateAlunoCommandHandler : IRequestHandler<CreateAlunoCommand, Result<AlunoResponse>>
 {
     private readonly IAlunoRepository _alunoRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<CreateAlunoHandler> _logger;
+    private readonly ILogger<CreateAlunoCommandHandler> _logger;
 
-    public CreateAlunoHandler(IAlunoRepository alunoRepository, AppDbContext context, ILogger<CreateAlunoHandler> logger)
+    public CreateAlunoCommandHandler(IAlunoRepository alunoRepository, AppDbContext context, ILogger<CreateAlunoCommandHandler> logger)
     {
         _alunoRepository = alunoRepository;
         _context = context;

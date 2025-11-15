@@ -7,13 +7,13 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Commands.Handlers;
 
-public class DeleteCursoHandler : IRequestHandler<DeleteCursoCommand, Result<bool>>
+public class DeleteCursoCommandHandler : IRequestHandler<DeleteCursoCommand, Result<bool>>
 {
     private readonly ICursoRepository _cursoRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<DeleteCursoHandler> _logger;
+    private readonly ILogger<DeleteCursoCommandHandler> _logger;
 
-    public DeleteCursoHandler(ICursoRepository cursoRepository, AppDbContext context, ILogger<DeleteCursoHandler> logger)
+    public DeleteCursoCommandHandler(ICursoRepository cursoRepository, AppDbContext context, ILogger<DeleteCursoCommandHandler> logger)
     {
         _cursoRepository = cursoRepository;
         _context = context;

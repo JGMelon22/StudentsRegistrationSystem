@@ -6,16 +6,16 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Matriculas.Commands.Handlers;
 
-public class RemoveMatriculaHandler : IRequestHandler<RemoveMatriculaCommand, Result<bool>>
+public class RemoveMatriculaCommandHandler : IRequestHandler<RemoveMatriculaCommand, Result<bool>>
 {
     private readonly IMatriculaRepository _matriculaRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<RemoveMatriculaHandler> _logger;
+    private readonly ILogger<RemoveMatriculaCommandHandler> _logger;
 
-    public RemoveMatriculaHandler(
+    public RemoveMatriculaCommandHandler(
         IMatriculaRepository matriculaRepository,
         AppDbContext context,
-        ILogger<RemoveMatriculaHandler> logger)
+        ILogger<RemoveMatriculaCommandHandler> logger)
     {
         _matriculaRepository = matriculaRepository;
         _context = context;

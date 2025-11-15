@@ -9,20 +9,20 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Matriculas.Commands.Handlers;
 
-public class CreateMatriculaHandler : IRequestHandler<CreateMatriculaCommand, Result<MatriculaResponse>>
+public class CreateMatriculaCommandHandler : IRequestHandler<CreateMatriculaCommand, Result<MatriculaResponse>>
 {
     private readonly IMatriculaRepository _matriculaRepository;
     private readonly IAlunoRepository _alunoRepository;
     private readonly ICursoRepository _cursoRepository;
     private readonly AppDbContext _context;
-    private readonly ILogger<CreateMatriculaHandler> _logger;
+    private readonly ILogger<CreateMatriculaCommandHandler> _logger;
 
-    public CreateMatriculaHandler(
+    public CreateMatriculaCommandHandler(
         IMatriculaRepository matriculaRepository,
         IAlunoRepository alunoRepository,
         ICursoRepository cursoRepository,
         AppDbContext context,
-        ILogger<CreateMatriculaHandler> logger)
+        ILogger<CreateMatriculaCommandHandler> logger)
     {
         _matriculaRepository = matriculaRepository;
         _alunoRepository = alunoRepository;

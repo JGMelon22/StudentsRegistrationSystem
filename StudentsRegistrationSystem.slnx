@@ -6,4 +6,7 @@
     <Project Path="src/StudentsRegistrationSystem.Infrastructure/StudentsRegistrationSystem.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />
+  <Folder Name="/tests/UnitTests/">
+    <Project Path="UnitTests/StudentsRegistrationSystem.API.UnitTests/StudentsRegistrationSystem.API.UnitTests.csproj" Id="70278f59-9224-4018-8bae-9d0275dd1a0f" />
+  </Folder>
 </Solution>

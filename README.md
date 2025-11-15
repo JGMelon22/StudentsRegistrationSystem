@@ -322,9 +322,6 @@ dotnet ef database update --project src/StudentsRegistrationSystem.Infrastructur
 
 # Reverter última migration
 dotnet ef migrations remove --project src/StudentsRegistrationSystem.Infrastructure --startup-project src/StudentsRegistrationSystem.API
-
-# Gerar script SQL
-dotnet ef migrations script --project src/StudentsRegistrationSystem.Infrastructure --startup-project src/StudentsRegistrationSystem.API --output migration.sql
 ```
 
 ### Build e Testes
@@ -349,10 +346,14 @@ dotnet test /p:CollectCoverage=true
 dotnet clean
 ```
 
+## 📖 Referências
+
+As seguintes referências foram especialmente úteis durante a implementação:
+
+- **Result Pattern**: [How to Manage Errors in .NET with the Result Pattern](https://www.nikolatech.net/blogs/result-pattern-manage-errors-in-dotnet) - Implementação do padrão Result para tratamento de erros sem exceptions
+- **Paginação**: [Pagination in a .NET Web API with EF Core](https://henriquesd.medium.com/pagination-in-a-net-web-api-with-ef-core-2e6cb032afb7) - Guia para implementação de paginação eficiente com Entity Framework Core
+
 ## 📝 Observações
 
-- O sistema utiliza **Guids** como identificadores únicos
 - As matrículas são **soft deleted** (campo `Ativa` ao invés de exclusão física)
 - Todos os endpoints retornam respostas padronizadas com `Result Pattern`
-- A API possui validação de dados tanto no nível de **Data Annotations** quanto na **camada de aplicação**
-- O projeto possui **testes unitários** para Controllers e Handlers, garantindo a qualidade do código

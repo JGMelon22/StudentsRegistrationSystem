@@ -4,6 +4,7 @@ using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
+using StudentsRegistrationSystem.Infrastructure.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Commands.Handlers;
 

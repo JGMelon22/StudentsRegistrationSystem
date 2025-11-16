@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Curso> Cursos { get; set; }
     public DbSet<Aluno> Alunos { get; set; }
-    public DbSet<Matricula> Matriculas { get; set; }
+    public virtual DbSet<Matricula> Matriculas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

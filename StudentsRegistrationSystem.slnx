@@ -10,4 +10,7 @@
     <Project Path="tests/UnitTests/StudentsRegistrationSystem.API.UnitTests/StudentsRegistrationSystem.API.UnitTests.csproj" />
     <Project Path="tests/UnitTests/StudentsRegistrationSystem.Application.UnitTests/StudentsRegistrationSystem.Application.UnitTests.csproj" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>

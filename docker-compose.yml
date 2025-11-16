@@ -1,0 +1,32 @@
+services:
+  studentsregistrationsystem.api:
+    image: ${DOCKER_REGISTRY-}studentsregistrationsystemapi
+    build:
+      context: .
+      dockerfile: src/StudentsRegistrationSystem.API/Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver,1433;Database=StudentsRegistrationSystemDb;User=sa;Password=Melon@123;TrustServerCertificate=True
+    networks:
+     - app-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Melon@123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    networks:
+     - app-network
+
+volumes:
+  sqlserverdata:
+
+networks:
+  app-network:
+    driver: bridge

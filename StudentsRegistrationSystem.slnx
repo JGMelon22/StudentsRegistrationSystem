@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/SqlSeedScripts/">
+    <File Path="DatabaseSeed.sql" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/StudentsRegistrationSystem.API/StudentsRegistrationSystem.API.csproj" />
     <Project Path="src/StudentsRegistrationSystem.Application/StudentsRegistrationSystem.Application.csproj" />

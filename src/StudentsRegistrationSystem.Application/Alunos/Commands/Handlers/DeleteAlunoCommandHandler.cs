@@ -35,6 +35,11 @@ public class DeleteAlunoCommandHandler : IRequestHandler<DeleteAlunoCommand, Res
                 return Result<bool>.Failure(Error.StudentNotFound);
             }
 
+            var matriculasDesativadas = _context.Matriculas
+                .Where(m => m.AlunoId == aluno.Id && !m.Ativa);
+
+            _context.Matriculas.RemoveRange(matriculasDesativadas);
+
             _alunoRepository.Delete(aluno);
             await _context.SaveChangesAsync(cancellationToken);
 

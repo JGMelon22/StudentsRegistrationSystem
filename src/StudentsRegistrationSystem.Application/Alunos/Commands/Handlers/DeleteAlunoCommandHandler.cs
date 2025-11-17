@@ -4,7 +4,6 @@ using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
-using StudentsRegistrationSystem.Infrastructure.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Commands.Handlers;
 
@@ -34,6 +33,15 @@ public class DeleteAlunoCommandHandler : IRequestHandler<DeleteAlunoCommand, Res
             {
                 _logger.LogWarning("Tentativa de deletar aluno não encontrado. Id: {AlunoId}", command.Id);
                 return Result<bool>.Failure(Error.StudentNotFound);
+            }
+
+            var existeMatriculaAtiva = _context.Matriculas
+                .Where(m => m.AlunoId == aluno.Id && m.Ativa);
+
+            if (existeMatriculaAtiva.Any())
+            {
+                _logger.LogWarning("Tentativa de deletar aluno com amtricula ativa. Id: {AlunoId}", command.Id);
+                return Result<bool>.Failure(Error.ActiveRegistration);
             }
 
             var matriculasDesativadas = _context.Matriculas

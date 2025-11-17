@@ -114,6 +114,51 @@ public class DeleteAlunoHandlerTests
     }
 
     [Fact]
+    public async Task Should_ReturnActiveRegistrationError_When_StudentHasActiveEnrollments()
+    {
+        // Arrange
+        var aluno = new Aluno("João Silva", "joao@email.com", new DateTime(2000, 1, 1));
+        var alunoId = aluno.Id; 
+        var command = new DeleteAlunoCommand(alunoId);
+
+        var matriculaAtiva = new Matricula(aluno.Id, Guid.NewGuid());
+
+        var matriculasAtivas = new List<Matricula>
+        {
+            matriculaAtiva
+        }.AsQueryable();
+
+        // Configurar o DbSet mockado para retornar a matrícula ativa
+        _matriculasDbSetMock.As<IQueryable<Matricula>>()
+            .Setup(m => m.Provider)
+            .Returns(matriculasAtivas.Provider);
+        _matriculasDbSetMock.As<IQueryable<Matricula>>()
+            .Setup(m => m.Expression)
+            .Returns(matriculasAtivas.Expression);
+        _matriculasDbSetMock.As<IQueryable<Matricula>>()
+            .Setup(m => m.ElementType)
+            .Returns(matriculasAtivas.ElementType);
+        _matriculasDbSetMock.As<IQueryable<Matricula>>()
+            .Setup(m => m.GetEnumerator())
+            .Returns(matriculasAtivas.GetEnumerator());
+
+        _contextMock.Setup(x => x.Matriculas).Returns(_matriculasDbSetMock.Object);
+
+        _alunoRepositoryMock
+            .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(aluno);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        Assert.False(result.IsSuccess);
+        Assert.Equal(Error.ActiveRegistration, result.Error);
+        _alunoRepositoryMock.Verify(x => x.Delete(It.IsAny<Aluno>()), Times.Never);
+        _contextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
     public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
     {
         // Arrange

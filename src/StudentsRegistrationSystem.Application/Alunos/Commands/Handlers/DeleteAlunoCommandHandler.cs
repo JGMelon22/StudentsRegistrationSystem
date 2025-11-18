@@ -10,15 +10,18 @@ namespace StudentsRegistrationSystem.Application.Alunos.Commands.Handlers;
 public class DeleteAlunoCommandHandler : IRequestHandler<DeleteAlunoCommand, Result<bool>>
 {
     private readonly IAlunoRepository _alunoRepository;
+    private readonly IMatriculaRepository _matriculaRepository;
     private readonly AppDbContext _context;
     private readonly ILogger<DeleteAlunoCommandHandler> _logger;
 
     public DeleteAlunoCommandHandler(
         IAlunoRepository alunoRepository,
+        IMatriculaRepository matriculaRepository,
         AppDbContext context,
         ILogger<DeleteAlunoCommandHandler> logger)
     {
         _alunoRepository = alunoRepository;
+        _matriculaRepository = matriculaRepository;
         _context = context;
         _logger = logger;
     }
@@ -35,17 +38,15 @@ public class DeleteAlunoCommandHandler : IRequestHandler<DeleteAlunoCommand, Res
                 return Result<bool>.Failure(Error.StudentNotFound);
             }
 
-            var existeMatriculaAtiva = _context.Matriculas
-                .Where(m => m.AlunoId == aluno.Id && m.Ativa);
+            var existeMatriculaAtiva = await _matriculaRepository.ExisteMatriculaAtivaPorAlunoId(aluno.Id);
 
-            if (existeMatriculaAtiva.Any())
+            if (existeMatriculaAtiva)
             {
                 _logger.LogWarning("Tentativa de deletar aluno com amtricula ativa. Id: {AlunoId}", command.Id);
                 return Result<bool>.Failure(Error.ActiveRegistration);
             }
 
-            var matriculasDesativadas = _context.Matriculas
-                .Where(m => m.AlunoId == aluno.Id && !m.Ativa);
+            var matriculasDesativadas = await _matriculaRepository.ObterMatriculasDesativadasPorAlunoId(aluno.Id);
 
             _context.Matriculas.RemoveRange(matriculasDesativadas);
 

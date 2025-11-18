@@ -25,7 +25,7 @@ public class GetAllAlunosQueryHandler : IRequestHandler<GetAllAlunosQuery, Resul
         {
             var pagedAlunos = await _alunoRepository.GetAllAsync(query.PageNumber, query.PageSize, cancellationToken);
 
-            var alunosResponse = pagedAlunos.Data.Select(a => a.ToResponse()).ToList();
+            var alunosResponse = pagedAlunos.Data.ToResponse().ToList();
 
             var pagedResponse = new PagedResponseOffset<AlunoResponse>(
                 alunosResponse,

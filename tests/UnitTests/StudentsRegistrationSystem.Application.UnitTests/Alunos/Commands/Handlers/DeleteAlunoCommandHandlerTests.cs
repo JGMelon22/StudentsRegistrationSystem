@@ -14,6 +14,7 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Alunos.Commands.Handl
 public class DeleteAlunoHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
+    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
     private readonly Mock<DbSet<Matricula>> _matriculasDbSetMock;
     private readonly Mock<ILogger<DeleteAlunoCommandHandler>> _loggerMock;
@@ -22,6 +23,7 @@ public class DeleteAlunoHandlerTests
     public DeleteAlunoHandlerTests()
     {
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
+        _matriculaRepositoryMock = new Mock<IMatriculaRepository>();
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .Options;
@@ -32,6 +34,7 @@ public class DeleteAlunoHandlerTests
 
         _handler = new DeleteAlunoCommandHandler(
             _alunoRepositoryMock.Object,
+            _matriculaRepositoryMock.Object,
             _contextMock.Object,
             _loggerMock.Object
         );
@@ -41,11 +44,10 @@ public class DeleteAlunoHandlerTests
     public async Task Should_DeleteAluno_When_AlunoExists()
     {
         // Arrange
-        var alunoId = Guid.NewGuid();
         var aluno = new Aluno("João Silva", "joao@email.com", new DateTime(2000, 1, 1));
+        var alunoId = aluno.Id;
         var command = new DeleteAlunoCommand(alunoId);
 
-        // Criar lista de matrículas desativadas para simular o cenário
         var matricula1 = new Matricula(alunoId, Guid.NewGuid());
         matricula1.Desativar();
         var matricula2 = new Matricula(alunoId, Guid.NewGuid());
@@ -55,28 +57,21 @@ public class DeleteAlunoHandlerTests
         {
             matricula1,
             matricula2
-        }.AsQueryable();
-
-        // Configurar o DbSet mockado para retornar as matrículas
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Provider)
-            .Returns(matriculasDesativadas.Provider);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Expression)
-            .Returns(matriculasDesativadas.Expression);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.ElementType)
-            .Returns(matriculasDesativadas.ElementType);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.GetEnumerator())
-            .Returns(matriculasDesativadas.GetEnumerator());
-
-        // Configurar a propriedade Matriculas do contexto
-        _contextMock.Setup(x => x.Matriculas).Returns(_matriculasDbSetMock.Object);
+        };
 
         _alunoRepositoryMock
             .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(aluno);
+
+        _matriculaRepositoryMock
+            .Setup(x => x.ExisteMatriculaAtivaPorAlunoId(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
+        _matriculaRepositoryMock
+            .Setup(x => x.ObterMatriculasDesativadasPorAlunoId(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(matriculasDesativadas);
+
+        _contextMock.Setup(x => x.Matriculas).Returns(_matriculasDbSetMock.Object);
 
         _contextMock
             .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
@@ -118,35 +113,16 @@ public class DeleteAlunoHandlerTests
     {
         // Arrange
         var aluno = new Aluno("João Silva", "joao@email.com", new DateTime(2000, 1, 1));
-        var alunoId = aluno.Id; 
+        var alunoId = aluno.Id;
         var command = new DeleteAlunoCommand(alunoId);
-
-        var matriculaAtiva = new Matricula(aluno.Id, Guid.NewGuid());
-
-        var matriculasAtivas = new List<Matricula>
-        {
-            matriculaAtiva
-        }.AsQueryable();
-
-        // Configurar o DbSet mockado para retornar a matrícula ativa
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Provider)
-            .Returns(matriculasAtivas.Provider);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Expression)
-            .Returns(matriculasAtivas.Expression);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.ElementType)
-            .Returns(matriculasAtivas.ElementType);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.GetEnumerator())
-            .Returns(matriculasAtivas.GetEnumerator());
-
-        _contextMock.Setup(x => x.Matriculas).Returns(_matriculasDbSetMock.Object);
 
         _alunoRepositoryMock
             .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(aluno);
+
+        _matriculaRepositoryMock
+            .Setup(x => x.ExisteMatriculaAtivaPorAlunoId(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -162,38 +138,33 @@ public class DeleteAlunoHandlerTests
     public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
     {
         // Arrange
-        var alunoId = Guid.NewGuid();
         var aluno = new Aluno("João Silva", "joao@email.com", new DateTime(2000, 1, 1));
+        var alunoId = aluno.Id;
         var command = new DeleteAlunoCommand(alunoId);
 
-        // Criar lista de matrículas desativadas
         var matricula = new Matricula(alunoId, Guid.NewGuid());
         matricula.Desativar();
 
         var matriculasDesativadas = new List<Matricula>
         {
             matricula
-        }.AsQueryable();
-
-        // Configurar o DbSet mockado
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Provider)
-            .Returns(matriculasDesativadas.Provider);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.Expression)
-            .Returns(matriculasDesativadas.Expression);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.ElementType)
-            .Returns(matriculasDesativadas.ElementType);
-        _matriculasDbSetMock.As<IQueryable<Matricula>>()
-            .Setup(m => m.GetEnumerator())
-            .Returns(matriculasDesativadas.GetEnumerator());
-
-        _contextMock.Setup(x => x.Matriculas).Returns(_matriculasDbSetMock.Object);
+        };
 
         _alunoRepositoryMock
             .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(aluno);
+
+        _matriculaRepositoryMock
+            .Setup(x => x.ExisteMatriculaAtivaPorAlunoId(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
+        _matriculaRepositoryMock
+            .Setup(x => x.ObterMatriculasDesativadasPorAlunoId(alunoId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(matriculasDesativadas);
+
+        _contextMock
+            .Setup(x => x.Matriculas)
+            .Returns(_matriculasDbSetMock.Object);
 
         _contextMock
             .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
@@ -205,8 +176,9 @@ public class DeleteAlunoHandlerTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.DatabaseError, result.Error);
-        _matriculasDbSetMock.Verify(x => x.RemoveRange(It.IsAny<IEnumerable<Matricula>>()), Times.Once);
+        _alunoRepositoryMock.Verify(x => x.Delete(aluno), Times.Once);
     }
+
 
     [Fact]
     public async Task Should_ReturnServerError_When_UnexpectedExceptionOccurs()

@@ -225,14 +225,13 @@ public record GetAlunoByIdQuery(Guid Id) : IRequest<Result<AlunoResponse>>;
 ```csharp
 public class CreateAlunoCommandHandler : IRequestHandler<CreateAlunoCommand, Result<AlunoResponse>>
 {
-    // Depende da INTERFACE, não da implementação concreta
+    // Depende de INTERFACES, não de implementações concretas
     private readonly IAlunoRepository _alunoRepository;
     private readonly ILogger<CreateAlunoCommandHandler> _logger;
 
     public CreateAlunoCommandHandler(
         IAlunoRepository alunoRepository,  // Interface injetada
-        AppDbContext context, 
-        ILogger<CreateAlunoCommandHandler> logger)
+        ILogger<CreateAlunoCommandHandler> logger)  // Interface injetada
     {
         _alunoRepository = alunoRepository;
         _logger = logger;

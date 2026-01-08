@@ -22,6 +22,11 @@ public class Repository<T> : IRepository<T> where T : Entity
         return await _dbSet.FindAsync(id, cancellationToken);
     }
 
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.CountAsync();
+    }
+
     public virtual async Task<PagedResponseOffset<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         int skip = (pageNumber - 1) * pageSize;

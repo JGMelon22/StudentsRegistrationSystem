@@ -48,6 +48,23 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
+    /// Obtém a contagem de cursos
+    /// </summary>
+    /// <returns>Quantidade de cursos.</returns>
+    /// <response code="200">Retorna quantidade de curso cadastrados.</response>
+    /// <response code="400">Erro de servidor.</response>
+    [HttpGet("count")]
+    public async Task<IActionResult> Count([FromQuery] CountCursosQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query);
+
+        return result.Match<IActionResult>(
+            value => Ok(value),
+            BadRequest
+        );
+    }
+
+    /// <summary>
     /// Obtém um curso específico pelo seu identificador.
     /// </summary>
     /// <param name="id">Identificador único do curso.</param>

@@ -43,6 +43,7 @@ public static class IocExtensions
 
         // Cursos - Queries
         services.AddScoped<IRequestHandler<GetCursoByIdQuery, Result<CursoResponse>>, GetCursoByIdQueryHandler>();
+        services.AddScoped<IRequestHandler<CountCursosQuery, Result<int>>, CountCursosQueryHandler>();
         services.AddScoped<IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>, GetAllCursosQueryHandler>();
 
         // Matriculas - Commands

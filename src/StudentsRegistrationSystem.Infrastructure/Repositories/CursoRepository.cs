@@ -18,7 +18,8 @@ public class CursoRepository : Repository<Curso>, ICursoRepository
         return await _dbSet.AnyAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<PagedResponseOffset<Aluno>> GetAlunosByCursoIdAsync(Guid cursoId, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<PagedResponseOffset<Aluno>> GetAlunosByCursoIdAsync(Guid cursoId, int pageNumber = 1,
+        int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var query = _context.Matriculas
             .Where(m => m.CursoId == cursoId && m.Ativa)

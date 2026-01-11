@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.API.UnitTests.Controllers;
 
 public class AlunosControllerTests
 {
-    private readonly Mock<IMediator> _mediatorMock;
     private readonly AlunosController _controller;
+    private readonly Mock<IMediator> _mediatorMock;
 
     public AlunosControllerTests()
     {
@@ -28,10 +28,14 @@ public class AlunosControllerTests
     public async Task Should_ReturnOkWithPagedList_When_GetAllIsSuccessful()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
         var alunos = new List<AlunoResponse>
         {
-            new() { Id = Guid.NewGuid(), Nome = "João Silva", Email = "joao@email.com", DataNascimento = new DateTime(2000, 1, 1), CreatedAt = DateTime.UtcNow }
+            new()
+            {
+                Id = Guid.NewGuid(), Nome = "João Silva", Email = "joao@email.com",
+                DataNascimento = new DateTime(2000, 1, 1), CreatedAt = DateTime.UtcNow
+            }
         };
         var pagedResponse = new PagedResponseOffset<AlunoResponse>(alunos, 1, 10, 1);
         var successResult = Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
@@ -54,7 +58,7 @@ public class AlunosControllerTests
     public async Task Should_ReturnBadRequest_When_GetAllFails()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
         var failureResult = Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
 
         _mediatorMock
@@ -79,10 +83,14 @@ public class AlunosControllerTests
     public async Task Should_ReturnOkWithPagedList_When_GetMatriculadosIsSuccessful()
     {
         // Arrange
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
         var alunos = new List<AlunoResponse>
         {
-            new() { Id = Guid.NewGuid(), Nome = "Maria Santos", Email = "maria@email.com", DataNascimento = new DateTime(1999, 5, 15), CreatedAt = DateTime.UtcNow }
+            new()
+            {
+                Id = Guid.NewGuid(), Nome = "Maria Santos", Email = "maria@email.com",
+                DataNascimento = new DateTime(1999, 5, 15), CreatedAt = DateTime.UtcNow
+            }
         };
         var pagedResponse = new PagedResponseOffset<AlunoResponse>(alunos, 1, 10, 1);
         var successResult = Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
@@ -105,7 +113,7 @@ public class AlunosControllerTests
     public async Task Should_ReturnBadRequest_When_GetMatriculadosFails()
     {
         // Arrange
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
         var failureResult = Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
 
         _mediatorMock
@@ -131,7 +139,11 @@ public class AlunosControllerTests
     {
         // Arrange
         var alunoId = Guid.NewGuid();
-        var aluno = new AlunoResponse { Id = alunoId, Nome = "Pedro Costa", Email = "pedro@email.com", DataNascimento = new DateTime(2001, 3, 20), CreatedAt = DateTime.UtcNow };
+        var aluno = new AlunoResponse
+        {
+            Id = alunoId, Nome = "Pedro Costa", Email = "pedro@email.com", DataNascimento = new DateTime(2001, 3, 20),
+            CreatedAt = DateTime.UtcNow
+        };
         var successResult = Result<AlunoResponse>.Success(aluno);
 
         _mediatorMock
@@ -145,7 +157,8 @@ public class AlunosControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().Be(aluno);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunoByIdQuery>(q => q.Id == alunoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunoByIdQuery>(q => q.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -166,8 +179,8 @@ public class AlunosControllerTests
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundObjectResult;
         notFoundResult!.Value.Should().Be(Error.StudentNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunoByIdQuery>(q => q.Id == alunoId), CancellationToken.None), Times.Once);
-
+        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunoByIdQuery>(q => q.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion
@@ -179,7 +192,11 @@ public class AlunosControllerTests
     {
         // Arrange
         var request = new AlunoRequest("Ana Lima", "ana@email.com", new DateTime(2002, 7, 10));
-        var createdAluno = new AlunoResponse { Id = Guid.NewGuid(), Nome = request.Nome, Email = request.Email, DataNascimento = request.DataNascimento, CreatedAt = DateTime.UtcNow };
+        var createdAluno = new AlunoResponse
+        {
+            Id = Guid.NewGuid(), Nome = request.Nome, Email = request.Email, DataNascimento = request.DataNascimento,
+            CreatedAt = DateTime.UtcNow
+        };
         var successResult = Result<AlunoResponse>.Success(createdAluno);
 
         _mediatorMock
@@ -229,7 +246,11 @@ public class AlunosControllerTests
         // Arrange
         var alunoId = Guid.NewGuid();
         var request = new AlunoRequest("Carlos Updated", "carlos.updated@email.com", new DateTime(2000, 12, 25));
-        var updatedAluno = new AlunoResponse { Id = alunoId, Nome = request.Nome, Email = request.Email, DataNascimento = request.DataNascimento, CreatedAt = DateTime.UtcNow };
+        var updatedAluno = new AlunoResponse
+        {
+            Id = alunoId, Nome = request.Nome, Email = request.Email, DataNascimento = request.DataNascimento,
+            CreatedAt = DateTime.UtcNow
+        };
         var successResult = Result<AlunoResponse>.Success(updatedAluno);
 
         _mediatorMock
@@ -243,7 +264,8 @@ public class AlunosControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().Be(updatedAluno);
-        _mediatorMock.Verify(m => m.Send(It.Is<UpdateAlunoCommand>(c => c.Id == alunoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<UpdateAlunoCommand>(c => c.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -265,7 +287,8 @@ public class AlunosControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.StudentNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<UpdateAlunoCommand>(c => c.Id == alunoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<UpdateAlunoCommand>(c => c.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion
@@ -288,7 +311,8 @@ public class AlunosControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-        _mediatorMock.Verify(m => m.Send(It.Is<DeleteAlunoCommand>(c => c.Id == alunoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<DeleteAlunoCommand>(c => c.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -309,7 +333,8 @@ public class AlunosControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.StudentNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<DeleteAlunoCommand>(c => c.Id == alunoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<DeleteAlunoCommand>(c => c.Id == alunoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion

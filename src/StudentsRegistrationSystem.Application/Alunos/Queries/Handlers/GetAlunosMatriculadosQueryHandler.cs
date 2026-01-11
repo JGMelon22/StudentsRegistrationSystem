@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Alunos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Alunos.Domains.Mappings;
@@ -8,46 +7,39 @@ using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
 namespace StudentsRegistrationSystem.Application.Alunos.Queries.Handlers;
 
-public class GetAlunosMatriculadosQueryHandler : IRequestHandler<GetAlunosMatriculadosQuery, Result<PagedResponseOffset<AlunoResponse>>>
+public class
+    GetAlunosMatriculadosQueryHandler : IRequestHandler<GetAlunosMatriculadosQuery,
+    Result<PagedResponseOffset<AlunoResponse>>>
 {
     private readonly IAlunoRepository _alunoRepository;
     private readonly ILogger<GetAlunosMatriculadosQueryHandler> _logger;
 
-    public GetAlunosMatriculadosQueryHandler(IAlunoRepository alunoRepository, ILogger<GetAlunosMatriculadosQueryHandler> logger)
+    public GetAlunosMatriculadosQueryHandler(IAlunoRepository alunoRepository,
+        ILogger<GetAlunosMatriculadosQueryHandler> logger)
     {
         _alunoRepository = alunoRepository;
         _logger = logger;
     }
 
-    public async Task<Result<PagedResponseOffset<AlunoResponse>>> Handle(GetAlunosMatriculadosQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedResponseOffset<AlunoResponse>>> Handle(GetAlunosMatriculadosQuery query,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var pagedAlunos = await _alunoRepository.GetAlunosMatriculadosAsync(query.PageNumber, query.PageSize, cancellationToken);
+        var pagedAlunos =
+            await _alunoRepository.GetAlunosMatriculadosAsync(query.PageNumber, query.PageSize, cancellationToken);
 
-            var alunosResponse = pagedAlunos.Data.ToResponse().ToList();
+        var alunosResponse = pagedAlunos.Data.ToResponse().ToList();
 
-            var pagedResponse = new PagedResponseOffset<AlunoResponse>(
-                alunosResponse,
-                pagedAlunos.PageNumber,
-                pagedAlunos.PageSize,
-                pagedAlunos.TotalRecords
-            );
+        var pagedResponse = new PagedResponseOffset<AlunoResponse>(
+            alunosResponse,
+            pagedAlunos.PageNumber,
+            pagedAlunos.PageSize,
+            pagedAlunos.TotalRecords
+        );
 
-            _logger.LogInformation("Consulta paginada de alunos matriculados realizada com sucesso. Página: {PageNumber}, Tamanho: {PageSize}, Total: {Total}",
-                pagedAlunos.PageNumber, pagedAlunos.PageSize, pagedAlunos.TotalRecords);
+        _logger.LogInformation(
+            "Consulta paginada de alunos matriculados realizada com sucesso. Página: {PageNumber}, Tamanho: {PageSize}, Total: {Total}",
+            pagedAlunos.PageNumber, pagedAlunos.PageSize, pagedAlunos.TotalRecords);
 
-            return Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
-        }
-        catch (DbUpdateException ex)
-        {
-            _logger.LogError(ex, "Erro de banco de dados ao consultar alunos matriculados.");
-            return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro inesperado ao consultar alunos matriculados.");
-            return Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.ServerError);
-        }
+        return Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
     }
 }

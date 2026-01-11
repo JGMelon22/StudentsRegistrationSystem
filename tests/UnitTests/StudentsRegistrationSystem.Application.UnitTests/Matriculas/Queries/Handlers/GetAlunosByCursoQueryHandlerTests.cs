@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Matriculas.Queries.Ha
 public class GetAlunosByCursoQueryHandlerTests
 {
     private readonly Mock<ICursoRepository> _cursoRepositoryMock;
-    private readonly Mock<ILogger<GetAlunosByCursoQueryHandler>> _loggerMock;
     private readonly GetAlunosByCursoQueryHandler _handler;
+    private readonly Mock<ILogger<GetAlunosByCursoQueryHandler>> _loggerMock;
 
     public GetAlunosByCursoQueryHandlerTests()
     {
@@ -31,7 +31,7 @@ public class GetAlunosByCursoQueryHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
 
         var alunos = new List<Aluno>
         {
@@ -75,7 +75,7 @@ public class GetAlunosByCursoQueryHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
 
         _cursoRepositoryMock
             .Setup(x => x.ExistsAsync(cursoId, It.IsAny<CancellationToken>()))
@@ -94,7 +94,8 @@ public class GetAlunosByCursoQueryHandlerTests
             Times.Once);
 
         _cursoRepositoryMock.Verify(
-            x => x.GetAlunosByCursoIdAsync(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()),
+            x => x.GetAlunosByCursoIdAsync(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>(),
+                It.IsAny<CancellationToken>()),
             Times.Never);
 
         _loggerMock.Verify(
@@ -112,7 +113,7 @@ public class GetAlunosByCursoQueryHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
 
         var emptyPagedAlunos = new PagedResponseOffset<Aluno>(new List<Aluno>(), 1, 10, 0);
 
@@ -139,7 +140,7 @@ public class GetAlunosByCursoQueryHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
         var dbException = new DbUpdateException("Database error");
 
         _cursoRepositoryMock
@@ -169,7 +170,7 @@ public class GetAlunosByCursoQueryHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
         var unexpectedException = new Exception("Unexpected error");
 
         _cursoRepositoryMock

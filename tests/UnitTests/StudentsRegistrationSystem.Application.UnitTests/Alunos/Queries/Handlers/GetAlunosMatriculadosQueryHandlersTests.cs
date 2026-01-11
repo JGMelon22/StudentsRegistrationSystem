@@ -12,8 +12,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Alunos.Queries.Handle
 public class GetAlunosMatriculadosHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<ILogger<GetAlunosMatriculadosQueryHandler>> _loggerMock;
     private readonly GetAlunosMatriculadosQueryHandler _handler;
+    private readonly Mock<ILogger<GetAlunosMatriculadosQueryHandler>> _loggerMock;
 
     public GetAlunosMatriculadosHandlerTests()
     {
@@ -33,7 +33,7 @@ public class GetAlunosMatriculadosHandlerTests
         };
 
         var pagedResponse = new PagedResponseOffset<Aluno>(alunos, 1, 10, 2);
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
 
         _alunoRepositoryMock
             .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))
@@ -56,7 +56,7 @@ public class GetAlunosMatriculadosHandlerTests
     {
         // Arrange
         var pagedResponse = new PagedResponseOffset<Aluno>(new List<Aluno>(), 1, 10, 0);
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
 
         _alunoRepositoryMock
             .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))
@@ -76,7 +76,7 @@ public class GetAlunosMatriculadosHandlerTests
     public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
     {
         // Arrange
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
 
         _alunoRepositoryMock
             .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))
@@ -94,7 +94,7 @@ public class GetAlunosMatriculadosHandlerTests
     public async Task Should_ReturnServerError_When_UnexpectedExceptionOccurs()
     {
         // Arrange
-        var query = new GetAlunosMatriculadosQuery(1, 10);
+        var query = new GetAlunosMatriculadosQuery();
 
         _alunoRepositoryMock
             .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))

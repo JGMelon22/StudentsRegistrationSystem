@@ -14,8 +14,8 @@ namespace StudentsRegistrationSystem.API.UnitTests.Controllers;
 
 public class MatriculasControllerTests
 {
-    private readonly Mock<IMediator> _mediatorMock;
     private readonly MatriculasController _controller;
+    private readonly Mock<IMediator> _mediatorMock;
 
     public MatriculasControllerTests()
     {
@@ -30,11 +30,19 @@ public class MatriculasControllerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
         var alunos = new List<AlunoResponse>
         {
-            new() { Id = Guid.NewGuid(), Nome = "João Silva", Email = "joao@email.com", DataNascimento = new DateTime(2000, 1, 1), CreatedAt = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid(), Nome = "Maria Santos", Email = "maria@email.com", DataNascimento = new DateTime(1999, 5, 15), CreatedAt = DateTime.UtcNow }
+            new()
+            {
+                Id = Guid.NewGuid(), Nome = "João Silva", Email = "joao@email.com",
+                DataNascimento = new DateTime(2000, 1, 1), CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), Nome = "Maria Santos", Email = "maria@email.com",
+                DataNascimento = new DateTime(1999, 5, 15), CreatedAt = DateTime.UtcNow
+            }
         };
         var pagedResponse = new PagedResponseOffset<AlunoResponse>(alunos, 1, 10, 2);
         var successResult = Result<PagedResponseOffset<AlunoResponse>>.Success(pagedResponse);
@@ -50,7 +58,8 @@ public class MatriculasControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().Be(pagedResponse);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
     }
 
     [Fact]
@@ -58,7 +67,7 @@ public class MatriculasControllerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
         var failureResult = Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.CourseNotFound);
 
         _mediatorMock
@@ -72,7 +81,8 @@ public class MatriculasControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.CourseNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
     }
 
     [Fact]
@@ -80,7 +90,7 @@ public class MatriculasControllerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId, 1, 10);
+        var query = new GetAlunosByCursoQuery(cursoId);
         var failureResult = Result<PagedResponseOffset<AlunoResponse>>.Failure(Error.DatabaseError);
 
         _mediatorMock
@@ -94,7 +104,8 @@ public class MatriculasControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.DatabaseError);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<GetAlunosByCursoQuery>(q => q.CursoId == cursoId), CancellationToken.None), Times.Once);
     }
 
     #endregion
@@ -218,7 +229,8 @@ public class MatriculasControllerTests
         var successResult = Result<bool>.Success(true);
 
         _mediatorMock
-            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None))
+            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None))
             .ReturnsAsync(successResult);
 
         // Act
@@ -226,7 +238,9 @@ public class MatriculasControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-        _mediatorMock.Verify(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None), Times.Once);
     }
 
     [Fact]
@@ -239,7 +253,8 @@ public class MatriculasControllerTests
         var failureResult = Result<bool>.Failure(Error.EnrollmentNotFound);
 
         _mediatorMock
-            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None))
+            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None))
             .ReturnsAsync(failureResult);
 
         // Act
@@ -249,7 +264,9 @@ public class MatriculasControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.EnrollmentNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None), Times.Once);
     }
 
     [Fact]
@@ -262,7 +279,8 @@ public class MatriculasControllerTests
         var failureResult = Result<bool>.Failure(Error.DatabaseError);
 
         _mediatorMock
-            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None))
+            .Setup(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None))
             .ReturnsAsync(failureResult);
 
         // Act
@@ -272,7 +290,9 @@ public class MatriculasControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.DatabaseError);
-        _mediatorMock.Verify(m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(
+            m => m.Send(It.Is<RemoveMatriculaCommand>(c => c.AlunoId == alunoId && c.CursoId == cursoId),
+                CancellationToken.None), Times.Once);
     }
 
     #endregion

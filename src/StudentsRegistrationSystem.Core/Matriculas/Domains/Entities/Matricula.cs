@@ -6,16 +6,9 @@ namespace StudentsRegistrationSystem.Core.Matriculas.Domains.Entities;
 
 public class Matricula : Entity
 {
-    public Guid AlunoId { get; private set; }
-    public Aluno Aluno { get; private set; }
-
-    public Guid CursoId { get; private set; }
-    public Curso Curso { get; private set; }
-
-    public DateTime DataMatricula { get; private set; }
-    public bool Ativa { get; private set; }
-
-    protected Matricula() { }
+    protected Matricula()
+    {
+    }
 
     public Matricula(Guid alunoId, Guid cursoId)
     {
@@ -24,6 +17,15 @@ public class Matricula : Entity
         DataMatricula = DateTime.UtcNow;
         Ativa = true;
     }
+
+    public Guid AlunoId { get; private set; }
+    public Aluno Aluno { get; private set; }
+
+    public Guid CursoId { get; private set; }
+    public Curso Curso { get; private set; }
+
+    public DateTime DataMatricula { get; private set; }
+    public bool Ativa { get; private set; }
 
     public void Desativar()
     {

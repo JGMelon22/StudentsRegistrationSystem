@@ -33,8 +33,12 @@ public static class IocExtensions
 
         // Alunos - Queries
         services.AddScoped<IRequestHandler<GetAlunoByIdQuery, Result<AlunoResponse>>, GetAlunoByIdQueryHandler>();
-        services.AddScoped<IRequestHandler<GetAllAlunosQuery, Result<PagedResponseOffset<AlunoResponse>>>, GetAllAlunosQueryHandler>();
-        services.AddScoped<IRequestHandler<GetAlunosMatriculadosQuery, Result<PagedResponseOffset<AlunoResponse>>>, GetAlunosMatriculadosQueryHandler>();
+        services
+            .AddScoped<IRequestHandler<GetAllAlunosQuery, Result<PagedResponseOffset<AlunoResponse>>>,
+                GetAllAlunosQueryHandler>();
+        services
+            .AddScoped<IRequestHandler<GetAlunosMatriculadosQuery, Result<PagedResponseOffset<AlunoResponse>>>,
+                GetAlunosMatriculadosQueryHandler>();
 
         // Cursos - Commands
         services.AddScoped<IRequestHandler<CreateCursoCommand, Result<CursoResponse>>, CreateCursoCommandHandler>();
@@ -44,14 +48,20 @@ public static class IocExtensions
         // Cursos - Queries
         services.AddScoped<IRequestHandler<GetCursoByIdQuery, Result<CursoResponse>>, GetCursoByIdQueryHandler>();
         services.AddScoped<IRequestHandler<CountCursosQuery, Result<int>>, CountCursosQueryHandler>();
-        services.AddScoped<IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>, GetAllCursosQueryHandler>();
+        services
+            .AddScoped<IRequestHandler<GetAllCursosQuery, Result<PagedResponseOffset<CursoResponse>>>,
+                GetAllCursosQueryHandler>();
 
         // Matriculas - Commands
-        services.AddScoped<IRequestHandler<CreateMatriculaCommand, Result<MatriculaResponse>>, CreateMatriculaCommandHandler>();
+        services
+            .AddScoped<IRequestHandler<CreateMatriculaCommand, Result<MatriculaResponse>>,
+                CreateMatriculaCommandHandler>();
         services.AddScoped<IRequestHandler<RemoveMatriculaCommand, Result<bool>>, RemoveMatriculaCommandHandler>();
 
         // Matriculas - Queries
-        services.AddScoped<IRequestHandler<GetAlunosByCursoQuery, Result<PagedResponseOffset<AlunoResponse>>>, GetAlunosByCursoQueryHandler>();
+        services
+            .AddScoped<IRequestHandler<GetAlunosByCursoQuery, Result<PagedResponseOffset<AlunoResponse>>>,
+                GetAlunosByCursoQueryHandler>();
 
         return services;
     }

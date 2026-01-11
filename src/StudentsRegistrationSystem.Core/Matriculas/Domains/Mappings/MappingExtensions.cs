@@ -7,10 +7,13 @@ namespace StudentsRegistrationSystem.Core.Matriculas.Domains.Mappings;
 public static class MappingExtensions
 {
     public static Matricula ToDomain(this MatriculaRequest request)
-        => new(request.AlunoId, request.CursoId);
+    {
+        return new Matricula(request.AlunoId, request.CursoId);
+    }
 
     public static MatriculaResponse ToResponse(this Matricula matricula)
-        => new()
+    {
+        return new MatriculaResponse
         {
             Id = matricula.Id,
             AlunoId = matricula.AlunoId,
@@ -20,7 +23,10 @@ public static class MappingExtensions
             DataMatricula = matricula.DataMatricula,
             Ativa = matricula.Ativa
         };
+    }
 
     public static IEnumerable<MatriculaResponse> ToResponse(this IEnumerable<Matricula> matriculas)
-        => matriculas.Select(matricula => matricula.ToResponse());
+    {
+        return matriculas.Select(matricula => matricula.ToResponse());
+    }
 }

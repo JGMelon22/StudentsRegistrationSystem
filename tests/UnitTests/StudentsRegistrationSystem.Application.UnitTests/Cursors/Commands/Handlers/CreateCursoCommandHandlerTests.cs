@@ -13,10 +13,10 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Cursors.Commands.Hand
 
 public class CreateCursoCommandHandlerTests
 {
-    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<CreateCursoCommandHandler>> _loggerMock;
+    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly CreateCursoCommandHandler _handler;
+    private readonly Mock<ILogger<CreateCursoCommandHandler>> _loggerMock;
 
     public CreateCursoCommandHandlerTests()
     {
@@ -37,7 +37,7 @@ public class CreateCursoCommandHandlerTests
         var request = new CursoRequest
         (
             "Matemática Avançada",
-             "Curso de matemática para nível avançado"
+            "Curso de matemática para nível avançado"
         );
 
         var command = new CreateCursoCommand(request);

@@ -13,12 +13,12 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Matriculas.Commands.H
 
 public class CreateMatriculaCommandHandlerTests
 {
-    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<CreateMatriculaCommandHandler>> _loggerMock;
+    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly CreateMatriculaCommandHandler _handler;
+    private readonly Mock<ILogger<CreateMatriculaCommandHandler>> _loggerMock;
+    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
 
     public CreateMatriculaCommandHandlerTests()
     {
@@ -75,7 +75,8 @@ public class CreateMatriculaCommandHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()), Times.Once);
+        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()),
+            Times.Once);
         _contextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -96,7 +97,8 @@ public class CreateMatriculaCommandHandlerTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.StudentNotFound, result.Error);
-        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()), Times.Never);
+        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]
@@ -120,7 +122,8 @@ public class CreateMatriculaCommandHandlerTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.CourseNotFound, result.Error);
-        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()), Times.Never);
+        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]
@@ -151,7 +154,8 @@ public class CreateMatriculaCommandHandlerTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.EnrollmentAlreadyEnrolled, result.Error);
-        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()), Times.Never);
+        _matriculaRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Matricula>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]

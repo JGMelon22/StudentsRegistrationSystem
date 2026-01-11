@@ -14,11 +14,11 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Alunos.Commands.Handl
 public class DeleteAlunoHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<DbSet<Matricula>> _matriculasDbSetMock;
-    private readonly Mock<ILogger<DeleteAlunoCommandHandler>> _loggerMock;
     private readonly DeleteAlunoCommandHandler _handler;
+    private readonly Mock<ILogger<DeleteAlunoCommandHandler>> _loggerMock;
+    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
+    private readonly Mock<DbSet<Matricula>> _matriculasDbSetMock;
 
     public DeleteAlunoHandlerTests()
     {

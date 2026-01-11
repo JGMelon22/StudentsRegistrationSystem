@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Cursors.Queries.Handl
 public class GetCursoByIdQueryHandlerTests
 {
     private readonly Mock<ICursoRepository> _cursoRepositoryMock;
-    private readonly Mock<ILogger<GetCursoByIdQueryHandler>> _loggerMock;
     private readonly GetCursoByIdQueryHandler _handler;
+    private readonly Mock<ILogger<GetCursoByIdQueryHandler>> _loggerMock;
 
     public GetCursoByIdQueryHandlerTests()
     {

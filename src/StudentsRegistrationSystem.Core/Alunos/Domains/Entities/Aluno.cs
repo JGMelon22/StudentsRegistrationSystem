@@ -5,14 +5,11 @@ namespace StudentsRegistrationSystem.Core.Alunos.Domains.Entities;
 
 public class Aluno : Entity
 {
-    public string Nome { get; private set; }
-    public string Email { get; private set; }
-    public DateTime DataNascimento { get; private set; }
-
     private readonly List<Matricula> _matriculas = new();
-    public IReadOnlyCollection<Matricula> Matriculas => _matriculas.AsReadOnly();
 
-    protected Aluno() { }
+    protected Aluno()
+    {
+    }
 
     public Aluno(string nome, string email, DateTime dataNascimento)
     {
@@ -20,6 +17,11 @@ public class Aluno : Entity
         Email = email;
         DataNascimento = dataNascimento;
     }
+
+    public string Nome { get; private set; }
+    public string Email { get; private set; }
+    public DateTime DataNascimento { get; private set; }
+    public IReadOnlyCollection<Matricula> Matriculas => _matriculas.AsReadOnly();
 
     public void Atualizar(string nome, string email, DateTime dataNascimento)
     {

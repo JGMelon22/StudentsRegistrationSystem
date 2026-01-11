@@ -7,7 +7,7 @@ using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Requests;
 namespace StudentsRegistrationSystem.API.Controllers;
 
 /// <summary>
-/// Controller responsável por gerenciar os cursos do sistema.
+///     Controller responsável por gerenciar os cursos do sistema.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -16,7 +16,7 @@ public class CursosController : ControllerBase
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Inicializa uma nova instância do <see cref="CursosController"/>.
+    ///     Inicializa uma nova instância do <see cref="CursosController" />.
     /// </summary>
     /// <param name="mediator">Instância do mediator para comunicação com a camada de aplicação.</param>
     public CursosController(IMediator mediator)
@@ -25,12 +25,12 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém todos os cursos cadastrados.
+    ///     Obtém todos os cursos cadastrados.
     /// </summary>
     /// <param name="query">
-    /// Parâmetros adicionais de consulta, incluindo paginação:
-    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
-    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    ///     Parâmetros adicionais de consulta, incluindo paginação:
+    ///     <br />- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    ///     <br />- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
     /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
     /// <returns>Lista paginada de cursos.</returns>
@@ -48,7 +48,7 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém a contagem de cursos
+    ///     Obtém a contagem de cursos
     /// </summary>
     /// <returns>Quantidade de cursos.</returns>
     /// <response code="200">Retorna quantidade de curso cadastrados.</response>
@@ -65,7 +65,7 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém um curso específico pelo seu identificador.
+    ///     Obtém um curso específico pelo seu identificador.
     /// </summary>
     /// <param name="id">Identificador único do curso.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
@@ -78,13 +78,13 @@ public class CursosController : ControllerBase
         var result = await _mediator.Send(new GetCursoByIdQuery(id));
 
         return result.Match<IActionResult>(
-           Ok,
-           NotFound
-       );
+            Ok,
+            NotFound
+        );
     }
 
     /// <summary>
-    /// Cria um novo curso.
+    ///     Cria um novo curso.
     /// </summary>
     /// <param name="request">Dados do curso a ser criado.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
@@ -106,7 +106,7 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
-    /// Atualiza os dados de um curso existente.
+    ///     Atualiza os dados de um curso existente.
     /// </summary>
     /// <param name="id">Identificador único do curso a ser atualizado.</param>
     /// <param name="request">Novos dados do curso.</param>
@@ -115,7 +115,8 @@ public class CursosController : ControllerBase
     /// <response code="200">Retorna o curso atualizado com sucesso.</response>
     /// <response code="400">Se os dados fornecidos forem inválidos.</response>
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] CursoRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(Guid id, [FromBody] CursoRequest request,
+        CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateCursoCommand(id, request));
 
@@ -126,7 +127,7 @@ public class CursosController : ControllerBase
     }
 
     /// <summary>
-    /// Remove um curso do sistema.
+    ///     Remove um curso do sistema.
     /// </summary>
     /// <param name="id">Identificador único do curso a ser removido.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>

@@ -8,9 +8,9 @@ namespace StudentsRegistrationSystem.Application.Matriculas.Commands.Handlers;
 
 public class RemoveMatriculaCommandHandler : IRequestHandler<RemoveMatriculaCommand, Result<bool>>
 {
-    private readonly IMatriculaRepository _matriculaRepository;
     private readonly AppDbContext _context;
     private readonly ILogger<RemoveMatriculaCommandHandler> _logger;
+    private readonly IMatriculaRepository _matriculaRepository;
 
     public RemoveMatriculaCommandHandler(
         IMatriculaRepository matriculaRepository,
@@ -24,34 +24,22 @@ public class RemoveMatriculaCommandHandler : IRequestHandler<RemoveMatriculaComm
 
     public async Task<Result<bool>> Handle(RemoveMatriculaCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
-            var matricula = await _matriculaRepository.GetMatriculaAtivaAsync(
-                command.AlunoId,
-                command.CursoId,
-                cancellationToken);
+        var matricula = await _matriculaRepository.GetMatriculaAtivaAsync(
+            command.AlunoId,
+            command.CursoId,
+            cancellationToken);
 
-            if (matricula == null)
-            {
-                _logger.LogWarning("Matrícula não encontrada para remoção. AlunoId: {AlunoId}, CursoId: {CursoId}", command.AlunoId, command.CursoId);
-                return Result<bool>.Failure(Error.EnrollmentNotFound);
-            }
-
-            matricula.Desativar();
-            _matriculaRepository.Update(matricula);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Result<bool>.Success(true);
-        }
-        catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+        if (matricula == null)
         {
-            _logger.LogError(ex, "Erro de banco de dados ao remover matrícula. AlunoId: {AlunoId}, CursoId: {CursoId}", command.AlunoId, command.CursoId);
-            return Result<bool>.Failure(Error.DatabaseError);
+            _logger.LogWarning("Matrícula não encontrada para remoção. AlunoId: {AlunoId}, CursoId: {CursoId}",
+                command.AlunoId, command.CursoId);
+            return Result<bool>.Failure(Error.EnrollmentNotFound);
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro inesperado ao remover matrícula. AlunoId: {AlunoId}, CursoId: {CursoId}", command.AlunoId, command.CursoId);
-            return Result<bool>.Failure(Error.ServerError);
-        }
+
+        matricula.Desativar();
+        _matriculaRepository.Update(matricula);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result<bool>.Success(true);
     }
 }

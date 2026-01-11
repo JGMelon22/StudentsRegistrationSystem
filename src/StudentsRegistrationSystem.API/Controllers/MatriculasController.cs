@@ -7,7 +7,7 @@ using StudentsRegistrationSystem.Core.Matriculas.Domains.DTOs.Requests;
 namespace StudentsRegistrationSystem.API.Controllers;
 
 /// <summary>
-/// Controller responsável por gerenciar as matrículas de alunos em cursos.
+///     Controller responsável por gerenciar as matrículas de alunos em cursos.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -16,7 +16,7 @@ public class MatriculasController : ControllerBase
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Inicializa uma nova instância do <see cref="MatriculasController"/>.
+    ///     Inicializa uma nova instância do <see cref="MatriculasController" />.
     /// </summary>
     /// <param name="mediator">Instância do mediator para comunicação com a camada de aplicação.</param>
     public MatriculasController(IMediator mediator)
@@ -25,20 +25,21 @@ public class MatriculasController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém todos os alunos matriculados em um curso específico.
+    ///     Obtém todos os alunos matriculados em um curso específico.
     /// </summary>
     /// <param name="cursoId">Identificador único do curso.</param>
     /// <param name="query">
-    /// Parâmetros adicionais de consulta, incluindo paginação:
-    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
-    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    ///     Parâmetros adicionais de consulta, incluindo paginação:
+    ///     <br />- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    ///     <br />- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
     /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
     /// <returns>Lista paginada de alunos matriculados no curso.</returns>
     /// <response code="200">Retorna a lista de alunos matriculados no curso.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("curso/{cursoId:guid}/alunos")]
-    public async Task<IActionResult> GetAlunosByCurso(Guid cursoId, [FromQuery] GetAlunosByCursoQuery query, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAlunosByCurso(Guid cursoId, [FromQuery] GetAlunosByCursoQuery query,
+        CancellationToken cancellationToken)
     {
         var queryWithCursoId = query with { CursoId = cursoId };
         var result = await _mediator.Send(queryWithCursoId);
@@ -50,7 +51,7 @@ public class MatriculasController : ControllerBase
     }
 
     /// <summary>
-    /// Cria uma nova matrícula de um aluno em um curso.
+    ///     Cria uma nova matrícula de um aluno em um curso.
     /// </summary>
     /// <param name="request">Dados da matrícula a ser criada.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
@@ -69,7 +70,7 @@ public class MatriculasController : ControllerBase
     }
 
     /// <summary>
-    /// Remove a matrícula de um aluno em um curso.
+    ///     Remove a matrícula de um aluno em um curso.
     /// </summary>
     /// <param name="request">Dados da matrícula a ser removida.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>

@@ -7,7 +7,7 @@ using StudentsRegistrationSystem.Core.Alunos.Domains.DTOs.Requests;
 namespace StudentsRegistrationSystem.API.Controllers;
 
 /// <summary>
-/// Controller responsável por gerenciar os alunos do sistema.
+///     Controller responsável por gerenciar os alunos do sistema.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -16,7 +16,7 @@ public class AlunosController : ControllerBase
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Inicializa uma nova instância do <see cref="AlunosController"/>.
+    ///     Inicializa uma nova instância do <see cref="AlunosController" />.
     /// </summary>
     /// <param name="mediator">Instância do mediator para comunicação com a camada de aplicação.</param>
     public AlunosController(IMediator mediator)
@@ -25,12 +25,12 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém todos os alunos cadastrados.
+    ///     Obtém todos os alunos cadastrados.
     /// </summary>
     /// <param name="query">
-    /// Parâmetros adicionais de consulta, incluindo paginação:
-    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
-    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    ///     Parâmetros adicionais de consulta, incluindo paginação:
+    ///     <br />- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    ///     <br />- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
     /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
     /// <returns>Lista paginada de alunos.</returns>
@@ -48,19 +48,20 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém todos os alunos que possuem ao menos uma matrícula ativa.
+    ///     Obtém todos os alunos que possuem ao menos uma matrícula ativa.
     /// </summary>
     /// <param name="query">
-    /// Parâmetros adicionais de consulta, incluindo paginação:
-    /// <br/>- <c>PageNumber</c>: número da página (opcional, padrão = 1)
-    /// <br/>- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
+    ///     Parâmetros adicionais de consulta, incluindo paginação:
+    ///     <br />- <c>PageNumber</c>: número da página (opcional, padrão = 1)
+    ///     <br />- <c>PageSize</c>: quantidade de itens por página (opcional, padrão = 10)
     /// </param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
     /// <returns>Lista paginada de alunos matriculados.</returns>
     /// <response code="200">Retorna a lista de alunos matriculados.</response>
     /// <response code="400">Se ocorrer um erro ao buscar os alunos.</response>
     [HttpGet("matriculados")]
-    public async Task<IActionResult> GetMatriculados([FromQuery] GetAlunosMatriculadosQuery query, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMatriculados([FromQuery] GetAlunosMatriculadosQuery query,
+        CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(query);
 
@@ -71,7 +72,7 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém um aluno específico pelo seu identificador.
+    ///     Obtém um aluno específico pelo seu identificador.
     /// </summary>
     /// <param name="id">Identificador único do aluno.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
@@ -90,7 +91,7 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Cria um novo aluno.
+    ///     Cria um novo aluno.
     /// </summary>
     /// <param name="request">Dados do aluno a ser criado.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>
@@ -109,7 +110,7 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Atualiza os dados de um aluno existente.
+    ///     Atualiza os dados de um aluno existente.
     /// </summary>
     /// <param name="id">Identificador único do aluno a ser atualizado.</param>
     /// <param name="request">Novos dados do aluno.</param>
@@ -118,7 +119,8 @@ public class AlunosController : ControllerBase
     /// <response code="200">Retorna o aluno atualizado com sucesso.</response>
     /// <response code="400">Se os dados fornecidos forem inválidos.</response>
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] AlunoRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(Guid id, [FromBody] AlunoRequest request,
+        CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateAlunoCommand(id, request));
 
@@ -129,7 +131,7 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
-    /// Remove um aluno do sistema.
+    ///     Remove um aluno do sistema.
     /// </summary>
     /// <param name="id">Identificador único do aluno a ser removido.</param>
     /// <param name="cancellationToken">Token de cancelamento da operação.</param>

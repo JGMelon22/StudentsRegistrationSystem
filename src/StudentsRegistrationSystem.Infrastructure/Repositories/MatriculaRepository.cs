@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentsRegistrationSystem.Core.Alunos.Domains.Entities;
 using StudentsRegistrationSystem.Core.Matriculas.Domains.Entities;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
@@ -20,14 +19,16 @@ public class MatriculaRepository : Repository<Matricula>, IMatriculaRepository
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
-    public async Task<bool> AlunoJaMatriculadoAsync(Guid alunoId, Guid cursoId, CancellationToken cancellationToken = default)
+    public async Task<bool> AlunoJaMatriculadoAsync(Guid alunoId, Guid cursoId,
+        CancellationToken cancellationToken = default)
     {
         return await _dbSet.AnyAsync(
             m => m.AlunoId == alunoId && m.CursoId == cursoId && m.Ativa,
             cancellationToken);
     }
 
-    public async Task<Matricula?> GetMatriculaAtivaAsync(Guid alunoId, Guid cursoId, CancellationToken cancellationToken = default)
+    public async Task<Matricula?> GetMatriculaAtivaAsync(Guid alunoId, Guid cursoId,
+        CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .Include(m => m.Aluno)
@@ -38,9 +39,12 @@ public class MatriculaRepository : Repository<Matricula>, IMatriculaRepository
     }
 
     public async Task<bool> ExisteMatriculaAtivaPorAlunoId(Guid alunoId, CancellationToken cancellationToken = default)
-        => await _dbSet.AnyAsync(m => m.AlunoId == alunoId && m.Ativa);
+    {
+        return await _dbSet.AnyAsync(m => m.AlunoId == alunoId && m.Ativa);
+    }
 
-    public async Task<IEnumerable<Matricula>> ObterMatriculasDesativadasPorAlunoId(Guid alunoId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Matricula>> ObterMatriculasDesativadasPorAlunoId(Guid alunoId,
+        CancellationToken cancellationToken = default)
     {
         return await _context.Matriculas
             .Where(m => m.AlunoId == alunoId && !m.Ativa)

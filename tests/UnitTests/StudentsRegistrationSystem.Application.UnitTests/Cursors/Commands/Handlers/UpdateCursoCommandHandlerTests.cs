@@ -14,10 +14,10 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Cursors.Commands.Hand
 
 public class UpdateCursoCommandHandlerTests
 {
-    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<UpdateCursoCommandHandler>> _loggerMock;
+    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly UpdateCursoCommandHandler _handler;
+    private readonly Mock<ILogger<UpdateCursoCommandHandler>> _loggerMock;
 
     public UpdateCursoCommandHandlerTests()
     {

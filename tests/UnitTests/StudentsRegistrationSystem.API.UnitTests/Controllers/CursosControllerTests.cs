@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.API.UnitTests.Controllers;
 
 public class CursosControllerTests
 {
-    private readonly Mock<IMediator> _mediatorMock;
     private readonly CursosController _controller;
+    private readonly Mock<IMediator> _mediatorMock;
 
     public CursosControllerTests()
     {
@@ -28,10 +28,14 @@ public class CursosControllerTests
     public async Task Should_ReturnOkWithPagedList_When_GetAllIsSuccessful()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
         var cursos = new List<CursoResponse>
         {
-            new() { Id = Guid.NewGuid(), Nome = "Matemática Básica", Descricao = "Curso de matemática para iniciantes", CreatedAt = DateTime.UtcNow }
+            new()
+            {
+                Id = Guid.NewGuid(), Nome = "Matemática Básica", Descricao = "Curso de matemática para iniciantes",
+                CreatedAt = DateTime.UtcNow
+            }
         };
         var pagedResponse = new PagedResponseOffset<CursoResponse>(cursos, 1, 10, 1);
         var successResult = Result<PagedResponseOffset<CursoResponse>>.Success(pagedResponse);
@@ -54,7 +58,7 @@ public class CursosControllerTests
     public async Task Should_ReturnBadRequest_When_GetAllFails()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
         var failureResult = Result<PagedResponseOffset<CursoResponse>>.Failure(Error.DatabaseError);
 
         _mediatorMock
@@ -80,7 +84,11 @@ public class CursosControllerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var curso = new CursoResponse { Id = cursoId, Nome = "Física Avançada", Descricao = "Curso avançado de física quântica", CreatedAt = DateTime.UtcNow };
+        var curso = new CursoResponse
+        {
+            Id = cursoId, Nome = "Física Avançada", Descricao = "Curso avançado de física quântica",
+            CreatedAt = DateTime.UtcNow
+        };
         var successResult = Result<CursoResponse>.Success(curso);
 
         _mediatorMock
@@ -94,7 +102,8 @@ public class CursosControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().Be(curso);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetCursoByIdQuery>(q => q.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<GetCursoByIdQuery>(q => q.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -115,7 +124,8 @@ public class CursosControllerTests
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundObjectResult;
         notFoundResult!.Value.Should().Be(Error.CourseNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<GetCursoByIdQuery>(q => q.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<GetCursoByIdQuery>(q => q.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion
@@ -127,7 +137,8 @@ public class CursosControllerTests
     {
         // Arrange
         var request = new CursoRequest("Química Orgânica", "Introdução à química orgânica e suas aplicações");
-        var createdCurso = new CursoResponse { Id = Guid.NewGuid(), Nome = request.Nome, Descricao = request.Descricao, CreatedAt = DateTime.UtcNow };
+        var createdCurso = new CursoResponse
+            { Id = Guid.NewGuid(), Nome = request.Nome, Descricao = request.Descricao, CreatedAt = DateTime.UtcNow };
         var successResult = Result<CursoResponse>.Success(createdCurso);
 
         _mediatorMock
@@ -176,8 +187,10 @@ public class CursosControllerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        var request = new CursoRequest("Biologia Atualizada", "Curso de biologia com conteúdo atualizado sobre genética");
-        var updatedCurso = new CursoResponse { Id = cursoId, Nome = request.Nome, Descricao = request.Descricao, CreatedAt = DateTime.UtcNow };
+        var request = new CursoRequest("Biologia Atualizada",
+            "Curso de biologia com conteúdo atualizado sobre genética");
+        var updatedCurso = new CursoResponse
+            { Id = cursoId, Nome = request.Nome, Descricao = request.Descricao, CreatedAt = DateTime.UtcNow };
         var successResult = Result<CursoResponse>.Success(updatedCurso);
 
         _mediatorMock
@@ -191,7 +204,8 @@ public class CursosControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().Be(updatedCurso);
-        _mediatorMock.Verify(m => m.Send(It.Is<UpdateCursoCommand>(c => c.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<UpdateCursoCommand>(c => c.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -213,7 +227,8 @@ public class CursosControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.CourseNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<UpdateCursoCommand>(c => c.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<UpdateCursoCommand>(c => c.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion
@@ -236,7 +251,8 @@ public class CursosControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-        _mediatorMock.Verify(m => m.Send(It.Is<DeleteCursoCommand>(c => c.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<DeleteCursoCommand>(c => c.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
@@ -257,7 +273,8 @@ public class CursosControllerTests
         result.Should().BeOfType<BadRequestObjectResult>();
         var badRequestResult = result as BadRequestObjectResult;
         badRequestResult!.Value.Should().Be(Error.CourseNotFound);
-        _mediatorMock.Verify(m => m.Send(It.Is<DeleteCursoCommand>(c => c.Id == cursoId), CancellationToken.None), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<DeleteCursoCommand>(c => c.Id == cursoId), CancellationToken.None),
+            Times.Once);
     }
 
     #endregion

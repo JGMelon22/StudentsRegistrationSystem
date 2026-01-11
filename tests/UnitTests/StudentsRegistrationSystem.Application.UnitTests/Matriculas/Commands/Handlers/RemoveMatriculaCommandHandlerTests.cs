@@ -13,10 +13,10 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Matriculas.Commands.H
 
 public class RemoveMatriculaCommandHandlerTests
 {
-    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<RemoveMatriculaCommandHandler>> _loggerMock;
     private readonly RemoveMatriculaCommandHandler _handler;
+    private readonly Mock<ILogger<RemoveMatriculaCommandHandler>> _loggerMock;
+    private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
 
     public RemoveMatriculaCommandHandlerTests()
     {

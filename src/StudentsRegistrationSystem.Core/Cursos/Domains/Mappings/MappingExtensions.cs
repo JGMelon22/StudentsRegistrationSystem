@@ -7,17 +7,23 @@ namespace StudentsRegistrationSystem.Core.Cursos.Domains.Mappings;
 public static class MappingExtensions
 {
     public static Curso ToDomain(this CursoRequest request)
-        => new(request.Nome, request.Descricao);
+    {
+        return new Curso(request.Nome, request.Descricao);
+    }
 
     public static CursoResponse ToResponse(this Curso curso)
-        => new()
+    {
+        return new CursoResponse
         {
             Id = curso.Id,
             Nome = curso.Nome,
             Descricao = curso.Descricao,
             CreatedAt = curso.CreatedAt
         };
+    }
 
     public static IEnumerable<CursoResponse> ToResponse(this IEnumerable<Curso> cursos)
-        => cursos.Select(curso => curso.ToResponse());
+    {
+        return cursos.Select(curso => curso.ToResponse());
+    }
 }

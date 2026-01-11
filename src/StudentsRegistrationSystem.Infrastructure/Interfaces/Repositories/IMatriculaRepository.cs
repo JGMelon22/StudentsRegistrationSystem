@@ -7,6 +7,7 @@ public interface IMatriculaRepository : IRepository<Matricula>
     Task<bool> AlunoJaMatriculadoAsync(Guid alunoId, Guid cursoId, CancellationToken cancellationToken = default);
     Task<Matricula?> GetMatriculaAtivaAsync(Guid alunoId, Guid cursoId, CancellationToken cancellationToken = default);
     Task<bool> ExisteMatriculaAtivaPorAlunoId(Guid alunoId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<Matricula>> ObterMatriculasDesativadasPorAlunoId(Guid alunoId, CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<Matricula>> ObterMatriculasDesativadasPorAlunoId(Guid alunoId,
+        CancellationToken cancellationToken = default);
 }

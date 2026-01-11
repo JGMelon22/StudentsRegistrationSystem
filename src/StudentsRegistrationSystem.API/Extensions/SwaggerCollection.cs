@@ -1,5 +1,5 @@
-﻿using Microsoft.OpenApi;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.OpenApi;
 
 namespace StudentsRegistrationSystem.API.Extensions;
 

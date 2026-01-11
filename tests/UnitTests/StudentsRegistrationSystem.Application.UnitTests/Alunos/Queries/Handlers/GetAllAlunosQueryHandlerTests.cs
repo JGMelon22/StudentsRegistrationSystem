@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Alunos.Queries.Handle
 public class GetAllAlunosQueryHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<ILogger<GetAllAlunosQueryHandler>> _loggerMock;
     private readonly GetAllAlunosQueryHandler _handler;
+    private readonly Mock<ILogger<GetAllAlunosQueryHandler>> _loggerMock;
 
     public GetAllAlunosQueryHandlerTests()
     {
@@ -30,7 +30,7 @@ public class GetAllAlunosQueryHandlerTests
     public async Task Should_ReturnPagedAlunosResponse_When_AlunosExist()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
 
         var alunos = new List<Aluno>
         {
@@ -66,7 +66,7 @@ public class GetAllAlunosQueryHandlerTests
     public async Task Should_ReturnEmptyList_When_NoAlunosExist()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
 
         var emptyPagedAlunos = new PagedResponseOffset<Aluno>(new List<Aluno>(), 1, 10, 0);
 
@@ -121,7 +121,7 @@ public class GetAllAlunosQueryHandlerTests
     public async Task Should_ReturnFailure_When_DbUpdateExceptionOccurs()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
         var dbException = new DbUpdateException("Database error");
 
         _alunoRepositoryMock
@@ -150,7 +150,7 @@ public class GetAllAlunosQueryHandlerTests
     public async Task Should_ReturnFailure_When_UnexpectedExceptionOccurs()
     {
         // Arrange
-        var query = new GetAllAlunosQuery(1, 10);
+        var query = new GetAllAlunosQuery();
         var unexpectedException = new Exception("Unexpected error");
 
         _alunoRepositoryMock

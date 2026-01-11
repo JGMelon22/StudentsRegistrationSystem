@@ -12,10 +12,10 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Cursors.Commands.Hand
 
 public class DeleteCursoCommandHandlerTests
 {
-    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<DeleteCursoCommandHandler>> _loggerMock;
+    private readonly Mock<ICursoRepository> _cursoRepositoryMock;
     private readonly DeleteCursoCommandHandler _handler;
+    private readonly Mock<ILogger<DeleteCursoCommandHandler>> _loggerMock;
 
     public DeleteCursoCommandHandlerTests()
     {

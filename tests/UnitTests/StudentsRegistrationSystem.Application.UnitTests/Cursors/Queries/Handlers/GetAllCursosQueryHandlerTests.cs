@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Cursors.Queries.Handl
 public class GetAllCursosQueryHandlerTests
 {
     private readonly Mock<ICursoRepository> _cursoRepositoryMock;
-    private readonly Mock<ILogger<GetAllCursosQueryHandler>> _loggerMock;
     private readonly GetAllCursosQueryHandler _handler;
+    private readonly Mock<ILogger<GetAllCursosQueryHandler>> _loggerMock;
 
     public GetAllCursosQueryHandlerTests()
     {
@@ -30,7 +30,7 @@ public class GetAllCursosQueryHandlerTests
     public async Task Should_ReturnPagedCursosResponse_When_CursosExist()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
 
         var cursos = new List<Curso>
         {
@@ -66,7 +66,7 @@ public class GetAllCursosQueryHandlerTests
     public async Task Should_ReturnEmptyList_When_NoCursosExist()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
 
         var emptyPagedCursos = new PagedResponseOffset<Curso>(new List<Curso>(), 1, 10, 0);
 
@@ -121,7 +121,7 @@ public class GetAllCursosQueryHandlerTests
     public async Task Should_ReturnFailure_When_DbUpdateExceptionOccurs()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
         var dbException = new DbUpdateException("Database error");
 
         _cursoRepositoryMock
@@ -150,7 +150,7 @@ public class GetAllCursosQueryHandlerTests
     public async Task Should_ReturnFailure_When_UnexpectedExceptionOccurs()
     {
         // Arrange
-        var query = new GetAllCursosQuery(1, 10);
+        var query = new GetAllCursosQuery();
         var unexpectedException = new Exception("Unexpected error");
 
         _cursoRepositoryMock

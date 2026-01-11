@@ -27,15 +27,17 @@ public class Repository<T> : IRepository<T> where T : Entity
         return await _dbSet.CountAsync();
     }
 
-    public virtual async Task<PagedResponseOffset<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    public virtual async Task<PagedResponseOffset<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
-        int skip = (pageNumber - 1) * pageSize;
+        var skip = (pageNumber - 1) * pageSize;
 
-        int totalRecords = await _dbSet.AsNoTracking().CountAsync(cancellationToken);
+        var totalRecords = await _dbSet.AsNoTracking().CountAsync(cancellationToken);
 
-        List<T> data = await _dbSet
+        var data = await _dbSet
             .AsNoTracking()
-            .OrderBy(e => e.Id) // IRL seria melhor usar pela data de criação, e mais ainda usar KeySet ao em vez de OffSet...
+            .OrderBy(e =>
+                e.Id) // IRL seria melhor usar pela data de criação, e mais ainda usar KeySet ao em vez de OffSet...
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

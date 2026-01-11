@@ -1,19 +1,21 @@
 <Solution>
-  <Folder Name="/SqlSeedScripts/">
-    <File Path="DatabaseSeed.sql" />
-  </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/StudentsRegistrationSystem.API/StudentsRegistrationSystem.API.csproj" />
-    <Project Path="src/StudentsRegistrationSystem.Application/StudentsRegistrationSystem.Application.csproj" />
-    <Project Path="src/StudentsRegistrationSystem.Core/StudentsRegistrationSystem.Core.csproj" />
-    <Project Path="src/StudentsRegistrationSystem.Infrastructure/StudentsRegistrationSystem.Infrastructure.csproj" />
-  </Folder>
-  <Folder Name="/tests/" />
-  <Folder Name="/tests/UnitTests/">
-    <Project Path="tests/UnitTests/StudentsRegistrationSystem.API.UnitTests/StudentsRegistrationSystem.API.UnitTests.csproj" />
-    <Project Path="tests/UnitTests/StudentsRegistrationSystem.Application.UnitTests/StudentsRegistrationSystem.Application.UnitTests.csproj" />
-  </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build />
-  </Project>
+    <Folder Name="/SqlSeedScripts/">
+        <File Path="DatabaseSeed.sql"/>
+    </Folder>
+    <Folder Name="/src/">
+        <Project Path="src/StudentsRegistrationSystem.API/StudentsRegistrationSystem.API.csproj"/>
+        <Project Path="src/StudentsRegistrationSystem.Application/StudentsRegistrationSystem.Application.csproj"/>
+        <Project Path="src/StudentsRegistrationSystem.Core/StudentsRegistrationSystem.Core.csproj"/>
+        <Project Path="src/StudentsRegistrationSystem.Infrastructure/StudentsRegistrationSystem.Infrastructure.csproj"/>
+    </Folder>
+    <Folder Name="/tests/"/>
+    <Folder Name="/tests/UnitTests/">
+        <Project
+                Path="tests/UnitTests/StudentsRegistrationSystem.API.UnitTests/StudentsRegistrationSystem.API.UnitTests.csproj"/>
+        <Project
+                Path="tests/UnitTests/StudentsRegistrationSystem.Application.UnitTests/StudentsRegistrationSystem.Application.UnitTests.csproj"/>
+    </Folder>
+    <Project Path="docker-compose.dcproj">
+        <Build/>
+    </Project>
 </Solution>

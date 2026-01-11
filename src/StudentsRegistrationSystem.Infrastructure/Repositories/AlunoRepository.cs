@@ -17,7 +17,8 @@ public class AlunoRepository : Repository<Aluno>, IAlunoRepository
         return await _dbSet.AnyAsync(a => a.Id == id, cancellationToken);
     }
 
-    public async Task<bool> EmailExistsAsync(string email, Guid? excludeId = null, CancellationToken cancellationToken = default)
+    public async Task<bool> EmailExistsAsync(string email, Guid? excludeId = null,
+        CancellationToken cancellationToken = default)
     {
         var query = _dbSet.Where(a => a.Email == email);
 
@@ -27,9 +28,10 @@ public class AlunoRepository : Repository<Aluno>, IAlunoRepository
         return await query.AnyAsync(cancellationToken);
     }
 
-    public async Task<PagedResponseOffset<Aluno>> GetAlunosMatriculadosAsync(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<PagedResponseOffset<Aluno>> GetAlunosMatriculadosAsync(int pageNumber = 1, int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
-        int skip = (pageNumber - 1) * pageSize;
+        var skip = (pageNumber - 1) * pageSize;
 
         var query = _context.Matriculas
             .Where(m => m.Ativa)
@@ -37,9 +39,9 @@ public class AlunoRepository : Repository<Aluno>, IAlunoRepository
             .Distinct()
             .AsNoTracking();
 
-        int totalRecords = await query.CountAsync(cancellationToken);
+        var totalRecords = await query.CountAsync(cancellationToken);
 
-        List<Aluno> data = await query
+        var data = await query
             .OrderBy(a => a.Nome)
             .Skip(skip)
             .Take(pageSize)

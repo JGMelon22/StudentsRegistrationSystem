@@ -13,8 +13,8 @@ namespace StudentsRegistrationSystem.Application.UnitTests.Alunos.Queries.Handle
 public class GetAlunoByIdQueryHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<ILogger<GetAlunoByIdQueryHandler>> _loggerMock;
     private readonly GetAlunoByIdQueryHandler _handler;
+    private readonly Mock<ILogger<GetAlunoByIdQueryHandler>> _loggerMock;
 
     public GetAlunoByIdQueryHandlerTests()
     {

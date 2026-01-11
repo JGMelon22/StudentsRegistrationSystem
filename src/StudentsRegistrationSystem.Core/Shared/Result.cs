@@ -2,14 +2,6 @@
 
 public sealed class Result<T>
 {
-    public T? Value { get; }
-
-    public Error? Error { get; }
-
-    public bool IsSuccess { get; }
-
-    public bool IsError => !IsSuccess;
-
     private Result(T value)
     {
         Value = value ?? throw new ArgumentNullException(nameof(value), "Value cannot be null.");
@@ -24,9 +16,23 @@ public sealed class Result<T>
         Error = error;
     }
 
-    public static Result<T> Success(T value) => new(value);
+    public T? Value { get; }
 
-    public static Result<T> Failure(Error error) => new(error);
+    public Error? Error { get; }
+
+    public bool IsSuccess { get; }
+
+    public bool IsError => !IsSuccess;
+
+    public static Result<T> Success(T value)
+    {
+        return new Result<T>(value);
+    }
+
+    public static Result<T> Failure(Error error)
+    {
+        return new Result<T>(error);
+    }
 
     public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<Error, TResult> onError)
     {

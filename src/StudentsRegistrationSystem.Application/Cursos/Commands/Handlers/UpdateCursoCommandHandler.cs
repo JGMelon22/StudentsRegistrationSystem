@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NetDevPack.SimpleMediator;
 using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Responses;
 using StudentsRegistrationSystem.Core.Cursos.Domains.Mappings;
@@ -11,11 +10,12 @@ namespace StudentsRegistrationSystem.Application.Cursos.Commands.Handlers;
 
 public class UpdateCursoCommandHandler : IRequestHandler<UpdateCursoCommand, Result<CursoResponse>>
 {
-    private readonly ICursoRepository _cursoRepository;
     private readonly AppDbContext _context;
+    private readonly ICursoRepository _cursoRepository;
     private readonly ILogger<UpdateCursoCommandHandler> _logger;
 
-    public UpdateCursoCommandHandler(ICursoRepository cursoRepository, AppDbContext context, ILogger<UpdateCursoCommandHandler> logger)
+    public UpdateCursoCommandHandler(ICursoRepository cursoRepository, AppDbContext context,
+        ILogger<UpdateCursoCommandHandler> logger)
     {
         _cursoRepository = cursoRepository;
         _context = context;
@@ -24,31 +24,18 @@ public class UpdateCursoCommandHandler : IRequestHandler<UpdateCursoCommand, Res
 
     public async Task<Result<CursoResponse>> Handle(UpdateCursoCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
-            var curso = await _cursoRepository.GetByIdAsync(command.Id, cancellationToken);
+        var curso = await _cursoRepository.GetByIdAsync(command.Id, cancellationToken);
 
-            if (curso == null)
-            {
-                _logger.LogWarning("Curso não encontrado para atualização. CursoId: {CursoId}", command.Id);
-                return Result<CursoResponse>.Failure(Error.CourseNotFound);
-            }
-
-            curso.Atualizar(command.Request.Nome, command.Request.Descricao);
-            _cursoRepository.Update(curso);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Result<CursoResponse>.Success(curso.ToResponse());
-        }
-        catch (DbUpdateException ex)
+        if (curso == null)
         {
-            _logger.LogError(ex, "Erro de banco de dados ao atualizar curso. CursoId: {CursoId}", command.Id);
-            return Result<CursoResponse>.Failure(Error.DatabaseError);
+            _logger.LogWarning("Curso não encontrado para atualização. CursoId: {CursoId}", command.Id);
+            return Result<CursoResponse>.Failure(Error.CourseNotFound);
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro inesperado ao atualizar curso. CursoId: {CursoId}", command.Id);
-            return Result<CursoResponse>.Failure(Error.ServerError);
-        }
+
+        curso.Atualizar(command.Request.Nome, command.Request.Descricao);
+        _cursoRepository.Update(curso);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result<CursoResponse>.Success(curso.ToResponse());
     }
 }

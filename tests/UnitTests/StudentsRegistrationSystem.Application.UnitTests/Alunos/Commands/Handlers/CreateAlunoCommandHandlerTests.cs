@@ -15,8 +15,8 @@ public class CreateAlunoHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
     private readonly Mock<AppDbContext> _contextMock;
-    private readonly Mock<ILogger<CreateAlunoCommandHandler>> _loggerMock;
     private readonly CreateAlunoCommandHandler _handler;
+    private readonly Mock<ILogger<CreateAlunoCommandHandler>> _loggerMock;
 
     public CreateAlunoHandlerTests()
     {

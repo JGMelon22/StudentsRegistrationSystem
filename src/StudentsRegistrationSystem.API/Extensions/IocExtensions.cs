@@ -33,6 +33,7 @@ public static class IocExtensions
 
         // Alunos - Queries
         services.AddScoped<IRequestHandler<GetAlunoByIdQuery, Result<AlunoResponse>>, GetAlunoByIdQueryHandler>();
+        services.AddScoped<IRequestHandler<CountAlunosQuery, Result<int>>, CountAlunosQueryHandler>();
         services
             .AddScoped<IRequestHandler<GetAllAlunosQuery, Result<PagedResponseOffset<AlunoResponse>>>,
                 GetAllAlunosQueryHandler>();

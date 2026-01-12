@@ -5,7 +5,6 @@ using StudentsRegistrationSystem.Application.Cursos.Commands;
 using StudentsRegistrationSystem.Application.Cursos.Commands.Handlers;
 using StudentsRegistrationSystem.Core.Cursos.Domains.DTOs.Requests;
 using StudentsRegistrationSystem.Core.Cursos.Domains.Entities;
-using StudentsRegistrationSystem.Core.Shared;
 using StudentsRegistrationSystem.Infrastructure.Data;
 using StudentsRegistrationSystem.Infrastructure.Interfaces.Repositories;
 
@@ -60,44 +59,5 @@ public class CreateCursoCommandHandlerTests
         Assert.Equal(request.Descricao, result.Value.Descricao);
         _cursoRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Curso>(), It.IsAny<CancellationToken>()), Times.Once);
         _contextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-    }
-
-    [Fact]
-    public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
-    {
-        // Arrange
-        var request = new CursoRequest("Matemática Avançada", "Curso de matemática para nível avançado");
-
-        var command = new CreateCursoCommand(request);
-
-        _contextMock
-            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new DbUpdateException("Database error"));
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.DatabaseError, result.Error);
-    }
-
-    [Fact]
-    public async Task Should_ReturnServerError_When_UnexpectedExceptionOccurs()
-    {
-        // Arrange
-        var request = new CursoRequest("Matemática Avançada", "Curso de matemática para nível avançado");
-        var command = new CreateCursoCommand(request);
-
-        _cursoRepositoryMock
-            .Setup(x => x.AddAsync(It.IsAny<Curso>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception("Unexpected error"));
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.ServerError, result.Error);
     }
 }

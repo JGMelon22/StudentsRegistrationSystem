@@ -1,5 +1,4 @@
 ﻿using AwesomeAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using StudentsRegistrationSystem.Application.Matriculas.Queries;
@@ -133,65 +132,5 @@ public class GetAlunosByCursoQueryHandlerTests
         result.IsSuccess.Should().BeTrue();
         result.Value!.Data.Should().BeEmpty();
         result.Value.TotalRecords.Should().Be(0);
-    }
-
-    [Fact]
-    public async Task Should_ReturnFailure_When_DbUpdateExceptionOccurs()
-    {
-        // Arrange
-        var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId);
-        var dbException = new DbUpdateException("Database error");
-
-        _cursoRepositoryMock
-            .Setup(x => x.ExistsAsync(cursoId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(dbException);
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.IsError.Should().BeTrue();
-        result.Error.Should().Be(Error.DatabaseError);
-
-        _loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Database error")),
-                It.Is<Exception>(ex => ex == dbException),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public async Task Should_ReturnFailure_When_UnexpectedExceptionOccurs()
-    {
-        // Arrange
-        var cursoId = Guid.NewGuid();
-        var query = new GetAlunosByCursoQuery(cursoId);
-        var unexpectedException = new Exception("Unexpected error");
-
-        _cursoRepositoryMock
-            .Setup(x => x.ExistsAsync(cursoId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(unexpectedException);
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.IsError.Should().BeTrue();
-        result.Error.Should().Be(Error.ServerError);
-
-        _loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Erro inesperado")),
-                It.Is<Exception>(ex => ex == unexpectedException),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
     }
 }

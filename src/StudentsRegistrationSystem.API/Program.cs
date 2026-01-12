@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudentsRegistrationSystem.API.Extensions;
+using StudentsRegistrationSystem.API.Middlewares;
 using StudentsRegistrationSystem.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,9 @@ builder.Services.AddHandlers();
 builder.Services.AddRepositories();
 
 builder.Services.AddSwagger();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 

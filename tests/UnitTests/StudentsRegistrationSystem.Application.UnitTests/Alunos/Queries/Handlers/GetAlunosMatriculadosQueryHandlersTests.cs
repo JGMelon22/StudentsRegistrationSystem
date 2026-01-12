@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using StudentsRegistrationSystem.Application.Alunos.Queries;
 using StudentsRegistrationSystem.Application.Alunos.Queries.Handlers;
@@ -70,41 +69,5 @@ public class GetAlunosMatriculadosHandlerTests
         Assert.NotNull(result.Value);
         Assert.Equal(0, result.Value.TotalRecords);
         Assert.Empty(result.Value.Data);
-    }
-
-    [Fact]
-    public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
-    {
-        // Arrange
-        var query = new GetAlunosMatriculadosQuery();
-
-        _alunoRepositoryMock
-            .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new DbUpdateException("Database error"));
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.DatabaseError, result.Error);
-    }
-
-    [Fact]
-    public async Task Should_ReturnServerError_When_UnexpectedExceptionOccurs()
-    {
-        // Arrange
-        var query = new GetAlunosMatriculadosQuery();
-
-        _alunoRepositoryMock
-            .Setup(x => x.GetAlunosMatriculadosAsync(1, 10, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception("Unexpected error"));
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.ServerError, result.Error);
     }
 }

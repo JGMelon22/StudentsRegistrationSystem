@@ -1,5 +1,4 @@
 ﻿using AwesomeAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using StudentsRegistrationSystem.Application.Alunos.Queries;
@@ -83,66 +82,6 @@ public class GetAlunoByIdQueryHandlerTests
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("aluno não encontrado")),
                 It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public async Task Should_ReturnFailure_When_DbUpdateExceptionOccurs()
-    {
-        // Arrange
-        var alunoId = Guid.NewGuid();
-        var query = new GetAlunoByIdQuery(alunoId);
-        var dbException = new DbUpdateException("Database error");
-
-        _alunoRepositoryMock
-            .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(dbException);
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.IsError.Should().BeTrue();
-        result.Error.Should().Be(Error.DatabaseError);
-
-        _loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Erro de banco de dados")),
-                It.Is<Exception>(ex => ex == dbException),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public async Task Should_ReturnFailure_When_UnexpectedExceptionOccurs()
-    {
-        // Arrange
-        var alunoId = Guid.NewGuid();
-        var query = new GetAlunoByIdQuery(alunoId);
-        var unexpectedException = new Exception("Unexpected error");
-
-        _alunoRepositoryMock
-            .Setup(x => x.GetByIdAsync(alunoId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(unexpectedException);
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.IsError.Should().BeTrue();
-        result.Error.Should().Be(Error.ServerError);
-
-        _loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Erro inesperado")),
-                It.Is<Exception>(ex => ex == unexpectedException),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }

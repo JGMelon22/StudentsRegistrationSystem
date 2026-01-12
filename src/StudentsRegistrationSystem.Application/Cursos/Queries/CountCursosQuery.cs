@@ -3,6 +3,4 @@ using StudentsRegistrationSystem.Core.Shared;
 
 namespace StudentsRegistrationSystem.Application.Cursos.Queries;
 
-public record CountCursosQuery : IRequest<Result<int>>
-{
-}
+public record CountCursosQuery : IRequest<Result<int>>;

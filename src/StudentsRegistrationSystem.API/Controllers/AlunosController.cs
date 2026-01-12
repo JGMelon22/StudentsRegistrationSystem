@@ -48,6 +48,23 @@ public class AlunosController : ControllerBase
     }
 
     /// <summary>
+    ///     Obtém a contagem de alunos
+    /// </summary>
+    /// <returns>Quantidade de alunos.</returns>
+    /// <response code="200">Retorna quantidade de alunos cadastrados.</response>
+    /// <response code="400">Erro de servidor.</response>
+    [HttpGet("count")]
+    public async Task<IActionResult> Count([FromQuery] CountAlunosQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query);
+
+        return result.Match<IActionResult>(
+            value => Ok(value),
+            BadRequest
+        );
+    }
+
+    /// <summary>
     ///     Obtém todos os alunos que possuem ao menos uma matrícula ativa.
     /// </summary>
     /// <param name="query">

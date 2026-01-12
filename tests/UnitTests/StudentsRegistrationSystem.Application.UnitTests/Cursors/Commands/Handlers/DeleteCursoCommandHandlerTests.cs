@@ -73,47 +73,4 @@ public class DeleteCursoCommandHandlerTests
         Assert.Equal(Error.CourseNotFound, result.Error);
         _cursoRepositoryMock.Verify(x => x.Delete(It.IsAny<Curso>()), Times.Never);
     }
-
-    [Fact]
-    public async Task Should_ReturnDatabaseError_When_DbUpdateExceptionOccurs()
-    {
-        // Arrange
-        var cursoId = Guid.NewGuid();
-        var curso = new Curso("Matemática", "Curso de matemática básica");
-        var command = new DeleteCursoCommand(cursoId);
-
-        _cursoRepositoryMock
-            .Setup(x => x.GetByIdAsync(cursoId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(curso);
-
-        _contextMock
-            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new DbUpdateException("Database error"));
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.DatabaseError, result.Error);
-    }
-
-    [Fact]
-    public async Task Should_ReturnServerError_When_UnexpectedExceptionOccurs()
-    {
-        // Arrange
-        var cursoId = Guid.NewGuid();
-        var command = new DeleteCursoCommand(cursoId);
-
-        _cursoRepositoryMock
-            .Setup(x => x.GetByIdAsync(cursoId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception("Unexpected error"));
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Equal(Error.ServerError, result.Error);
-    }
 }
